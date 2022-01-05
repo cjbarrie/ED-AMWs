@@ -1,10 +1,10 @@
 ---
-title: "SICSS-Oxford, 2021"
-subtitle: "Working with Digital Data: APIs"
+title: "University of Edinburgh, Research Training Centre"
+subtitle: "Using APIs and web scraping "
 author:
   name: Christopher Barrie
-  affiliation: University of Edinburgh | [SICSS](https://github.com/cjbarrie/sicss_21)
-# date: Lecture 6  #"09 June 2021"
+  affiliation: University of Edinburgh | [AMWs](https://github.com/cjbarrie/ED-AMWs)
+# date: Lecture 6  #"05 January 2022"
 output: 
   html_document:
     theme: flatly
@@ -413,7 +413,7 @@ query
 ```
 
 ```
-## [1] "#BLM -is:retweet place:London -is:nullcast has:links has:videos lang:en"
+## [1] "#BLM -is:retweet -is:nullcast has:links has:videos place:London lang:en"
 ```
 
 We can also enter geographical information with the `build_query()` function. Our two options here are the `point_radius` and `bbox` arguments. Both of these take numeric vectors as inputs. The `point_radius` argument requires three pieces of information: the longitude and latitude of a target coordinate, and the buffer size around that coordinate. The `bbox` argument, which stands for "bounding box," requires four pieces of information: the longitude and latitude of the southwest corner of the bounding box and the longitude and latitude of the northeast corner of the bounding box.
@@ -496,7 +496,7 @@ query
 ```
 
 ```
-## [1] "(#BLM OR #BlackLivesMatter OR #GeorgeFloyd) -is:retweet place:London -is:nullcast has:links has:videos lang:en"
+## [1] "(#BLM OR #BlackLivesMatter OR #GeorgeFloyd) -is:retweet -is:nullcast has:links has:videos place:London lang:en"
 ```
 
 And if you wanted to just call `build_query()` within the `get_all_tweets()` function (rather than building it separately) you could do this too:

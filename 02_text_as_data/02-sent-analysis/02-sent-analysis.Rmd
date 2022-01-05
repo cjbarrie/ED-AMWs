@@ -1,9 +1,9 @@
 ---
-title: "Text as Data: Sentiment analysis"
-subtitle: "SICSS-Oxford, 2021"
+title: "University of Edinburgh, Research Training Centre"
+subtitle: "Computational Text Analysis (pt. 1)"
 author:
   name: Christopher Barrie
-  affiliation: University of Edinburgh | [SICSS](https://github.com/cjbarrie/sicss_21)
+  affiliation: University of Edinburgh | [AMWs](https://github.com/cjbarrie/ED-AMWs)
 output: 
   html_document:
     theme: flatly

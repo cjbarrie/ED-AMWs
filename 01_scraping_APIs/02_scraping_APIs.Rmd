@@ -1,9 +1,9 @@
 ---
-title: "SICSS-Oxford, 2021"
-subtitle: "Working with Digital Data: APIs"
+title: "University of Edinburgh, Research Training Centre"
+subtitle: "Using APIs and web scraping "
 author:
   name: Christopher Barrie
-  affiliation: University of Edinburgh | [SICSS](https://github.com/cjbarrie/sicss_21)
+  affiliation: University of Edinburgh | [AMWs](https://github.com/cjbarrie/ED-AMWs)
 # date: Lecture 6  #"`r format(Sys.time(), '%d %B %Y')`"
 output: 
   html_document:

@@ -1,11 +1,10 @@
 Topic models
 ========================================================
 author: Christopher Barrie 
-date: Thursday, June 17: SICSS-Oxford
 width: 2500
 height: 900
 transition: none  
-  website: https://cjbarrie.xyz     
+  website: https://cjbarrie.com  
   github: https://github.com/cjbarrie       
   Twitter: https://www.twitter.com/cbarrie
 
@@ -214,4 +213,4 @@ Extensions
 Worksheets
 ========================================================
 
-- [https://github.com/cjbarrie/sicss_21](https://github.com/cjbarrie/sicss_21)
+- [https://github.com/cjbarrie/ED-AMWs](https://github.com/cjbarrie/ED-AMWs)

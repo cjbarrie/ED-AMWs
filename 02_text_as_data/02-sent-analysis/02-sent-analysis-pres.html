@@ -201,7 +201,7 @@ body {
   <style type="text/css">
 
 .reveal h1 { 
-  font-size: 2.5em; 
+  font-size: 2.5em;
 }
 
 .reveal h1,
@@ -210,12 +210,12 @@ body {
 .reveal h4,
 .reveal h5,
 .reveal h6 { 
-   margin-bottom: .6em;    
+   margin-bottom: .6em;
 }
 
 .reveal p,
 .reveal table {
-   margin-bottom: 1em; 
+   margin-bottom: 1em;
 }
 
 .reveal li {
@@ -242,7 +242,7 @@ body {
   max-width: 95%;
   border: 1px solid #ccc;
   white-space: pre-wrap;
-  margin-bottom: 1em; 
+  margin-bottom: 1em;
 }
 
 .reveal pre code {
@@ -315,7 +315,7 @@ body {
 }
 
 .quiz-multichoice .reveal .quizFeedback span {
-  font-size: 1.4em; 
+  font-size: 1.4em;
   margin-left: 12px;
 }
 
@@ -785,10 +785,10 @@ hljs.initHighlightingOnLoad();
   <div class="slides">
 
 <section data-state="section" data-transition="none" data-transition-speed="default">
-<h1>Sentiment Analysis</h1><p>Christopher Barrie<br/>Thursday, June 17: SICSS-Oxford</p>
+<h1>Sentiment Analysis</h1><p>Christopher Barrie</p>
 
 <div class="slideContent" >
-<p>website: <a href="https://cjbarrie.xyz">https://cjbarrie.xyz</a><br/>
+<p>website: <a href="https://cjbarrie.com">https://cjbarrie.com</a><br/>
   github: <a href="https://github.com/cjbarrie">https://github.com/cjbarrie</a><br/>
   Twitter: <a href="https://www.twitter.com/cbarrie">https://www.twitter.com/cbarrie</a></p>
 
@@ -1194,7 +1194,7 @@ head(pamph_nrc_sentiment)
 <h3>Worksheets</h3>
 <div class="slideContent" >
 <ul>
-<li><a href="https://github.com/cjbarrie/sicss_21">https://github.com/cjbarrie/sicss_21</a></li>
+<li><a href="https://github.com/cjbarrie/ED-AMWs">https://github.com/cjbarrie/ED-AMWs</a></li>
 </ul>
 
 </div>
@@ -1233,7 +1233,7 @@ var Reveal=function(){"use strict";function e(e){return Mt||kt?(window.addEventL
 
 // dynamically built function to get slide specific commands
 function commandsForSlide(indexh) {
-  var cmds = []; 
+  var cmds = [];
   switch(indexh) {
 
     default:
@@ -1276,7 +1276,7 @@ function commandsForSlide(indexh) {
      
       // allow mathjax to re-render
       if (window.MathJax)
-        window.MathJax.Hub.Rerender(event.currentSlide);  
+        window.MathJax.Hub.Rerender(event.currentSlide);
     });
     
     // forward command key events to the rstudio frame
@@ -1284,11 +1284,11 @@ function commandsForSlide(indexh) {
 
       // allow 'o' to toggle overview mode
       switch( e.keyCode ) {
-         case 79: case 42: window.Reveal.toggleOverview(); break;  
+         case 79: case 42: window.Reveal.toggleOverview(); break;
       }
    
       if (window.parent.presentationKeydown)
-         window.parent.presentationKeydown(e);   
+         window.parent.presentationKeydown(e);
    }
    
    window.onresize = function() { 
@@ -1301,7 +1301,7 @@ function commandsForSlide(indexh) {
        clearTimeout(window.activeTimer);
        
      window.activeTimer = setTimeout(function() { 
-       window.location.reload(true); 
+       window.location.reload(true);
      }, 300);
    }
 
