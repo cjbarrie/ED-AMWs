@@ -3,7 +3,7 @@ Repository for Advanced Methods Workshops materials (University of Edinburgh, Re
 
 ![Alt Text](coursebanner.png)
 
-Repo of teaching materials for Advanced Methods Workshops taught by Dr Christopher Barroe
+Repo of teaching materials for Advanced Methods Workshops taught by Dr Christopher Barrie
 
 ## Using APIs and web scraping 
 
