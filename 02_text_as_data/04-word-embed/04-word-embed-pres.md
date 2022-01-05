@@ -160,4 +160,4 @@ Extensions
 Worksheets
 ========================================================
 
-- [https://github.com/cjbarrie/ED-AMWs](https://github.com/cjbarrie/ED-AMWs)
+- [https://github.com/cjbarrie/ED-AMW](https://github.com/cjbarrie/ED-AMW)
