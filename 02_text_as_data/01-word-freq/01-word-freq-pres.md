@@ -32,7 +32,7 @@ head(bookdata)
 ```
 
 ```
-# A tibble: 6 x 1
+# A tibble: 6 × 1
   txt                  
   <chr>                
 1 "PRIDE AND PREJUDICE"
@@ -54,7 +54,7 @@ bookdata %>%
 ```
 
 ```
-# A tibble: 6,538 x 2
+# A tibble: 6,538 × 2
    word      n
    <chr> <int>
  1 the    4331
@@ -82,7 +82,7 @@ bookdata %>%
 ```
 
 ```
-# A tibble: 6,009 x 2
+# A tibble: 6,009 × 2
    word          n
    <chr>     <int>
  1 elizabeth   597
@@ -171,7 +171,7 @@ tidy_des %>%
 ```
 
 ```
-# A tibble: 24,995 x 2
+# A tibble: 24,995 × 2
    word       n
    <chr>  <int>
  1 rsquo   5638
@@ -208,7 +208,7 @@ tidy_des %>%
 ```
 
 ```
-# A tibble: 24,989 x 2
+# A tibble: 24,989 × 2
    word        n
    <chr>   <int>
  1 book     2088
@@ -264,7 +264,7 @@ tidy_des %>%
 ```
 
 ```
-# A tibble: 19 x 2
+# A tibble: 19 × 2
    word          n
    <fct>     <int>
  1 book       2088
@@ -353,4 +353,4 @@ ggplot(edbf_counts, aes(year, sum_wom / year_total, group=1)) +
 Worksheets
 ========================================================
 
-- [https://github.com/cjbarrie/ED-AMW](https://github.com/cjbarrie/ED-AMW)
+- [https://github.com/cjbarrie/ED-AMWs](https://github.com/cjbarrie/ED-AMWs)

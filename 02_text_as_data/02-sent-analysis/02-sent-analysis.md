@@ -61,18 +61,21 @@ pamphdata <- read_csv("data/pamphlets_formatted_gsheets.csv")
 ```
 
 ```
-## 
+## Rows: 523 Columns: 8
+```
+
+```
 ## ── Column specification ────────────────────────────────────────────────────────
-## cols(
-##   title = col_character(),
-##   date = col_date(format = ""),
-##   year = col_double(),
-##   text = col_character(),
-##   tags = col_character(),
-##   imageurl = col_character(),
-##   imgID = col_character(),
-##   image = col_character()
-## )
+## Delimiter: ","
+## chr  (6): title, text, tags, imageurl, imgID, image
+## dbl  (1): year
+## date (1): date
+```
+
+```
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 You can also view the formatted output of this scraping exercise, alongside images of the documents in question, in Google Sheets [here](https://docs.google.com/spreadsheets/d/1rg2VTV6uuknpu6u-L5n7kvQ2cQ6e6Js7IHp7CaSKe90/edit?usp=sharing).
@@ -94,7 +97,7 @@ head(pamphdata)
 ```
 
 ```
-## # A tibble: 6 x 8
+## # A tibble: 6 × 8
 ##   title      date        year text         tags      imageurl       imgID image 
 ##   <chr>      <date>     <dbl> <chr>        <chr>     <chr>          <chr> <chr> 
 ## 1 The Seaso… 2011-03-30  2011 The Season … Solidari… https://wayba… imgI… =Arra…
@@ -134,7 +137,7 @@ tidy_pamph %>%
 ```
 
 ```
-## # A tibble: 12,133 x 2
+## # A tibble: 12,133 × 2
 ##    word             n
 ##    <chr>        <int>
 ##  1 revolution    2051
@@ -166,7 +169,7 @@ get_sentiments("afinn")
 ```
 
 ```
-## # A tibble: 2,477 x 2
+## # A tibble: 2,477 × 2
 ##    word       value
 ##    <chr>      <dbl>
 ##  1 abandon       -2
@@ -188,7 +191,7 @@ get_sentiments("bing")
 ```
 
 ```
-## # A tibble: 6,786 x 2
+## # A tibble: 6,786 × 2
 ##    word        sentiment
 ##    <chr>       <chr>    
 ##  1 2-faces     negative 
@@ -210,7 +213,7 @@ get_sentiments("nrc")
 ```
 
 ```
-## # A tibble: 13,901 x 2
+## # A tibble: 13,901 × 2
 ##    word        sentiment
 ##    <chr>       <chr>    
 ##  1 abacus      trust    
@@ -245,7 +248,7 @@ tidy_pamph %>%
 ```
 
 ```
-## # A tibble: 336 x 2
+## # A tibble: 336 × 2
 ##    word         n
 ##    <chr>    <int>
 ##  1 freedom    447
@@ -405,163 +408,6 @@ tidy_pamph %>%
 ![](02-sent-analysis_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 
 We do some small evidence that there was a higher frequency of joy words earlier on in the uprising. Further analyses, however, might build a more domain-specific dictionary. For example, if we were interested in the frequency of democracy demands over time, we might build a specific lexicon for this, coding democracy-related words as 1 and everything else as 0.
-
-## Sentiment of sentences
-
-Note that to this point we have been conducting sentiment analyses on unigrams; i.e., single words. Clearly this is prone to error. An obvious example of where such error could creep in is with negation. For example, in the sentence, "I am not happy" the word "happy" would be scored for positive emotion as the scoring method is blind to the negation. Negation is a type of "valence shifting." This means that the valence of a word might change depending on its broader context in a sequence of words. 
-
-There are ways of dealing with this, however. In the next section we will look into how we might go about taking account of valence shifters. For this, we will be using   <tt>sentimentr</tt> package by @R-sentimentr. This is a development package so can't be installed in the normal way. Instead, run the following code to install it:
-
-
-```r
-if (!require("pacman")) install.packages("pacman")
-pacman::p_load_current_gh("trinker/lexicon", "trinker/sentimentr")
-
-library(sentimentr)
-```
-
-
-
-```r
-library(sentimentr)
-
-pamph_sentences <- get_sentences(pamphdata)
-pamph_sentences_sent <- sentiment(pamph_sentences)
-
-pamph_sentences_sent %>%
-  group_by(date) %>%
-  summarise(ave_sentiment = mean(sentiment)) %>%
-  ggplot(aes(date, ave_sentiment)) +
-  geom_point(alpha=0.5) +
-  geom_smooth(method= loess, alpha=0.25)
-```
-
-```
-## `geom_smooth()` using formula 'y ~ x'
-```
-
-![](02-sent-analysis_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
-
-With the <tt>sentimentr</tt> package we can check how this dictionary-based method is scoring words by outputting random sections of text and highlighting them red or green based on the sentiment score attached to the sentence in question. This is easy to achieve with some in-built functions that come with the package: 
-
-
-
-```r
-set.seed(123)
-pamphdata %>%
-    filter(imgID %in% sample(unique(imgID), 3)) %>%
-    mutate(pamphsentences = get_sentences(text)) %$%
-    sentiment_by(pamphsentences, imgID) %>%
-    highlight()
-```
-
-![](images/senthighlight.png)
-What do we make of how this text has been scored? There does seem to be some logic to the sections coded as positive versus negative. But more than anything, this shows us that there is clear error in how texts are scored, even when valence shifting is taken into account.
-
-## Domain-specific lexicons
-
-Of course, list- or dictionary-based methods need not only focus on sentiment, even if this is one of their most common uses. In essence, what you'll have seen from the above is that sentiment analysis techniques rely on a given lexicon and score words appropriately. And there is nothing stopping us from making our own dictionaries, whether they measure sentiment or not. In the data above, we might be interested, for example, in the demands individuals or organizations are advancing at protests. As such, we might choose to make our own dictionary of terms. What would this look like?
-
-A very minimal example would choose, for example, words like "demand" and its synonyms and score these all as 1. We would then combine these into a dictionary, which we've called "demdict" here. 
-
-
-```r
-word <- c('demand', 'claim', 'call', 'insist')
-value <- c(1, 1, 1, 1)
-demdict <- data.frame(word, value)
-
-demdict
-```
-
-```
-##     word value
-## 1 demand     1
-## 2  claim     1
-## 3   call     1
-## 4 insist     1
-```
-
-We could then use the same technique as above to bind these with our data and look at the incidence of such words over time. Combining the sequence of scripts from above we would do the following:
-
-
-```r
-#get tidy version of pamphlet data
-tidy_pamph <- pamphdata %>% 
-  mutate(desc = tolower(text)) %>%
-  unnest_tokens(word, desc) %>%
-  filter(str_detect(word, "[a-z]"))
-
-#remove stopwords
-tidy_pamph <- tidy_pamph %>%
-    filter(!word %in% stop_words$word)
-
-#order and format date
-tidy_pamph<- tidy_pamph %>%
-  arrange(date)
-#get indexing column
-tidy_pamph$order <- 1:nrow(tidy_pamph)
-
-tidy_pamph %>%
-  inner_join(demdict) %>%
-  group_by(date, index = order %/% 1000) %>% 
-  summarise(demandwords = sum(value)) %>% 
-  ggplot(aes(date, demandwords)) +
-  geom_point(alpha=0.5) +
-  geom_smooth(method= loess, alpha=0.25) +
-  ylab("demand words")
-```
-
-```
-## Joining, by = "word"
-```
-
-```
-## `summarise()` has grouped output by 'date'. You can override using the `.groups` argument.
-```
-
-```
-## `geom_smooth()` using formula 'y ~ x'
-```
-
-![](02-sent-analysis_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
-
-The above simply counts the number of demand words over time. This might be misleading if there are, for example, more or longer documents at certain points in time; i.e., if the length or quantity of text is not time-constant. Why would this matter? Well, in the above it could just be that we have more demand words earlier on because there are just more pamphlets earlier on. By just counting words, we are not taking into account the denominator.
-
-
-An alternative, and preferable, method here would simply take a character string of the relevant words. We would then sum the total number of words across all pamphlets over time. Then we would filter our pamphlet words by whether or not they are a demand word or not, according to the dictionary of words we have constructed. We would then do the same again with these words, summing the number of times they appear for each data. 
-
-After this, we join with our data frame of total words for each data. Note that here we are using `full_join()` as we want to include dates that appear in the "totals" data frame that do not appear when we filter for demand words; i.e., days when demand words are equal to 0. We then go about plotting as before.
-
-
-```r
-demwords <- c('demand', 'claim', 'call', 'insist')
-
-#get total tweets per day (no missing dates so no date completion required)
-totals <- tidy_pamph %>%
-  mutate(obs=1) %>%
-  group_by(date) %>%
-  summarise(sum_words = sum(obs))
-
-#plot
-tidy_pamph %>%
-  mutate(obs=1) %>%
-  filter(grepl(paste0(demwords, collapse = "|"),word, ignore.case = T)) %>%
-  group_by(date) %>%
-  summarise(sum_dwords = sum(obs)) %>%
-  full_join(totals, word, by="date") %>%
-  mutate(sum_dwords= ifelse(is.na(sum_dwords), 0, sum_dwords),
-         pctdwords = sum_dwords/sum_words) %>%
-  ggplot(aes(date, pctdwords)) +
-  geom_point(alpha=0.5) +
-  geom_smooth(method= loess, alpha=0.25) +
-  xlab("Date") + ylab("% demand words")
-```
-
-```
-## `geom_smooth()` using formula 'y ~ x'
-```
-
-![](02-sent-analysis_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
 
 ## Exercises
 

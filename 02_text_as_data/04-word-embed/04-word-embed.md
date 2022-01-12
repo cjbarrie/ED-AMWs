@@ -3,7 +3,7 @@ title: "University of Edinburgh, Research Training Centre"
 subtitle: "Computational Text Analysis (pt. 2)"
 author:
   name: Christopher Barrie
-  affiliation: University of Edinburgh | [AMWs](https://github.com/cjbarrie/ED-AMW)
+  affiliation: University of Edinburgh | [AMWs](https://github.com/cjbarrie/ED-AMWs)
 output: 
   html_document:
     theme: flatly
@@ -90,7 +90,7 @@ head(tidy_skipgrams, n=20)
 
 
 ```
-## # A tibble: 20 x 4
+## # A tibble: 20 × 4
 ##    username  party_value             skipgramID word   
 ##    <chr>     <chr>                   <chr>      <chr>  
 ##  1 kirstysnp Scottish National Party 1_1        in     
@@ -136,18 +136,11 @@ head(skipgram_probs[1000:1020,], n=20)
 ## Please use `distinct()` instead.
 ## See vignette('programming') for more help
 ## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
 ```
 
 ```
-## Warning: `tbl_df()` was deprecated in dplyr 1.0.0.
-## Please use `tibble::as_tibble()` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.
-```
-
-```
-## # A tibble: 20 x 4
+## # A tibble: 20 × 4
 ##    item1   item2       n         p
 ##    <chr>   <chr>   <dbl>     <dbl>
 ##  1 no      to       4100 0.0000531
@@ -219,7 +212,7 @@ normalized_prob %>%
 ```
 
 ```
-## # A tibble: 1,016 x 7
+## # A tibble: 1,016 × 7
 ##    word1  word2                      n           p      p1         p2 p_together
 ##    <chr>  <chr>                  <dbl>       <dbl>   <dbl>      <dbl>      <dbl>
 ##  1 brexit brexit                 38517 0.000499    0.00279 0.00279          64.0

@@ -859,7 +859,7 @@ hljs.initHighlightingOnLoad();
 bingsent
 </code></pre>
 
-<pre><code># A tibble: 6,786 x 2
+<pre><code># A tibble: 6,786 × 2
    word        sentiment
    &lt;chr&gt;       &lt;chr&gt;    
  1 2-faces     negative 
@@ -885,7 +885,7 @@ bingsent
 <li>Pride and Prejudice words tagged with sentiment </li>
 </ul>
 
-<pre><code># A tibble: 11 x 2
+<pre><code># A tibble: 11 × 2
    word       sentiment
    &lt;chr&gt;      &lt;chr&gt;    
  1 abuse      negative 
@@ -964,7 +964,7 @@ pamphdata &lt;- read_csv(&quot;https://raw.githubusercontent.com/cjbarrie/RDL-Ed
 <pre><code class="r">get_sentiments(&quot;afinn&quot;)
 </code></pre>
 
-<pre><code># A tibble: 2,477 x 2
+<pre><code># A tibble: 2,477 × 2
    word       value
    &lt;chr&gt;      &lt;dbl&gt;
  1 abandon       -2
@@ -989,7 +989,7 @@ pamphdata &lt;- read_csv(&quot;https://raw.githubusercontent.com/cjbarrie/RDL-Ed
 <pre><code class="r">get_sentiments(&quot;nrc&quot;)
 </code></pre>
 
-<pre><code># A tibble: 13,901 x 2
+<pre><code># A tibble: 13,901 × 2
    word        sentiment
    &lt;chr&gt;       &lt;chr&gt;    
  1 abacus      trust    
@@ -1014,7 +1014,7 @@ pamphdata &lt;- read_csv(&quot;https://raw.githubusercontent.com/cjbarrie/RDL-Ed
 <pre><code class="r">get_sentiments(&quot;bing&quot;)
 </code></pre>
 
-<pre><code># A tibble: 6,786 x 2
+<pre><code># A tibble: 6,786 × 2
    word        sentiment
    &lt;chr&gt;       &lt;chr&gt;    
  1 2-faces     negative 
@@ -1055,7 +1055,7 @@ tidy_pamph &lt;- tidy_pamph %&gt;%
   count(word, sort = TRUE)
 </code></pre>
 
-<pre><code># A tibble: 12,133 x 2
+<pre><code># A tibble: 12,133 × 2
    word             n
    &lt;chr&gt;        &lt;int&gt;
  1 revolution    2051
@@ -1108,7 +1108,7 @@ pamph_nrc_sentiment &lt;- pamph_nrc_sentiment %&gt;%
 head(pamph_nrc_sentiment)
 </code></pre>
 
-<pre><code># A tibble: 6 x 4
+<pre><code># A tibble: 6 × 4
   date       index sentiment        n
   &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;        &lt;int&gt;
 1 2011-03-11     0 anger           18
@@ -1132,7 +1132,7 @@ pamph_nrc_sentiment &lt;- pamph_nrc_sentiment %&gt;%
 head(pamph_nrc_sentiment)
 </code></pre>
 
-<pre><code># A tibble: 6 x 12
+<pre><code># A tibble: 6 × 12
   date       index anger anticipation disgust  fear   joy negative positive sadness surprise trust
   &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
 1 2011-03-11     0    18           13      16    25    12       32       36      14        9    29
@@ -1156,7 +1156,7 @@ pamph_nrc_sentiment &lt;- pamph_nrc_sentiment %&gt;%
 head(pamph_nrc_sentiment)
 </code></pre>
 
-<pre><code># A tibble: 6 x 13
+<pre><code># A tibble: 6 × 13
   date       index anger anticipation disgust  fear   joy negative positive sadness surprise trust sentiment
   &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
 1 2011-03-11     0    18           13      16    25    12       32       36      14        9    29         4

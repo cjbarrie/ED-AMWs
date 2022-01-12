@@ -3,7 +3,7 @@ title: "University of Edinburgh, Research Training Centre"
 subtitle: "Computational Text Analysis (pt. 2)"
 author:
   name: Christopher Barrie
-  affiliation: University of Edinburgh | [AMWs](https://github.com/cjbarrie/ED-AMW)
+  affiliation: University of Edinburgh | [AMWs](https://github.com/cjbarrie/ED-AMWs)
 output: 
   html_document:
     theme: flatly
@@ -119,7 +119,7 @@ head(tocq_topics, n = 10)
 ```
 
 ```
-## # A tibble: 10 x 3
+## # A tibble: 10 × 3
 ##    topic term          beta
 ##    <int> <chr>        <dbl>
 ##  1     1 democratic 0.00855
@@ -189,7 +189,7 @@ tidy_tocq %>%
 ```
 
 ```
-## # A tibble: 12,092 x 2
+## # A tibble: 12,092 × 2
 ##    word           n
 ##    <chr>      <int>
 ##  1 people       876
@@ -278,7 +278,7 @@ tocq_word_counts
 ```
 
 ```
-## # A tibble: 69,781 x 3
+## # A tibble: 69,781 × 3
 ##    document word             n
 ##    <chr>    <chr>        <int>
 ##  1 DiA2_76  united          88
@@ -354,7 +354,7 @@ tocq_chapters_gamma
 ```
 
 ```
-## # A tibble: 264 x 3
+## # A tibble: 264 × 3
 ##    document topic     gamma
 ##    <chr>    <int>     <dbl>
 ##  1 DiA2_76      1 0.551    
@@ -399,7 +399,7 @@ tocq_chapter_classifications %>%
 ```
 
 ```
-## # A tibble: 15 x 5
+## # A tibble: 15 × 5
 ##    title chapter topic gamma consensus
 ##    <chr>   <int> <int> <dbl> <chr>    
 ##  1 DiA1       45     1 0.762 DiA2     
@@ -428,7 +428,7 @@ assignments
 ```
 
 ```
-## # A tibble: 69,781 x 4
+## # A tibble: 69,781 × 4
 ##    document term   count .topic
 ##    <chr>    <chr>  <dbl>  <dbl>
 ##  1 DiA2_76  united    88      2

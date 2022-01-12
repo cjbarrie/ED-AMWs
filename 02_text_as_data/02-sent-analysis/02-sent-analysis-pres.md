@@ -61,7 +61,7 @@ bingsent
 ```
 
 ```
-# A tibble: 6,786 x 2
+# A tibble: 6,786 × 2
    word        sentiment
    <chr>       <chr>    
  1 2-faces     negative 
@@ -84,7 +84,7 @@ Sentiment analysis
 
 
 ```
-# A tibble: 11 x 2
+# A tibble: 11 × 2
    word       sentiment
    <chr>      <chr>    
  1 abuse      negative 
@@ -144,7 +144,7 @@ get_sentiments("afinn")
 ```
 
 ```
-# A tibble: 2,477 x 2
+# A tibble: 2,477 × 2
    word       value
    <chr>      <dbl>
  1 abandon       -2
@@ -168,7 +168,7 @@ get_sentiments("nrc")
 ```
 
 ```
-# A tibble: 13,901 x 2
+# A tibble: 13,901 × 2
    word        sentiment
    <chr>       <chr>    
  1 abacus      trust    
@@ -192,7 +192,7 @@ get_sentiments("bing")
 ```
 
 ```
-# A tibble: 6,786 x 2
+# A tibble: 6,786 × 2
    word        sentiment
    <chr>       <chr>    
  1 2-faces     negative 
@@ -233,7 +233,7 @@ tidy_pamph %>%
 ```
 
 ```
-# A tibble: 12,133 x 2
+# A tibble: 12,133 × 2
    word             n
    <chr>        <int>
  1 revolution    2051
@@ -284,7 +284,7 @@ head(pamph_nrc_sentiment)
 ```
 
 ```
-# A tibble: 6 x 4
+# A tibble: 6 × 4
   date       index sentiment        n
   <date>     <dbl> <chr>        <int>
 1 2011-03-11     0 anger           18
@@ -308,7 +308,7 @@ head(pamph_nrc_sentiment)
 ```
 
 ```
-# A tibble: 6 x 12
+# A tibble: 6 × 12
   date       index anger anticipation disgust  fear   joy negative positive sadness surprise trust
   <date>     <dbl> <dbl>        <dbl>   <dbl> <dbl> <dbl>    <dbl>    <dbl>   <dbl>    <dbl> <dbl>
 1 2011-03-11     0    18           13      16    25    12       32       36      14        9    29
@@ -332,7 +332,7 @@ head(pamph_nrc_sentiment)
 ```
 
 ```
-# A tibble: 6 x 13
+# A tibble: 6 × 13
   date       index anger anticipation disgust  fear   joy negative positive sadness surprise trust sentiment
   <date>     <dbl> <dbl>        <dbl>   <dbl> <dbl> <dbl>    <dbl>    <dbl>   <dbl>    <dbl> <dbl>     <dbl>
 1 2011-03-11     0    18           13      16    25    12       32       36      14        9    29         4

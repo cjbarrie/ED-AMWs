@@ -160,7 +160,7 @@ tocq_topics %>%
 ```
 
 ```
-# A tibble: 120,920 x 3
+# A tibble: 120,920 × 3
    topic term         beta
    <int> <chr>       <dbl>
  1     4 democratic 0.0193
@@ -189,7 +189,7 @@ head(tocq_gamma, n = 10)
 ```
 
 ```
-# A tibble: 10 x 3
+# A tibble: 10 × 3
    document topic      gamma
    <chr>    <int>      <dbl>
  1 DiA2         1 0.00504   
@@ -213,4 +213,4 @@ Extensions
 Worksheets
 ========================================================
 
-- [https://github.com/cjbarrie/ED-AMW](https://github.com/cjbarrie/ED-AMW)
+- [https://github.com/cjbarrie/ED-AMWs](https://github.com/cjbarrie/ED-AMWs)

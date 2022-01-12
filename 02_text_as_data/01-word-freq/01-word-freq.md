@@ -3,7 +3,7 @@ title: "University of Edinburgh, Research Training Centre"
 subtitle: "Computational Text Analysis (pt. 1)"
 author:
   name: Christopher Barrie
-  affiliation: University of Edinburgh | [AMWs](https://github.com/cjbarrie/ED-AMW)
+  affiliation: University of Edinburgh | [AMWs](https://github.com/cjbarrie/ED-AMWs)
 output: 
   html_document:
     theme: flatly
@@ -61,26 +61,25 @@ edbfdata <- read_csv("data/edbookfestall.csv")
 ```
 
 ```
-## Warning: Missing column names filled in: 'X1' [1]
+## New names:
+## * `` -> ...1
+```
+
+```
+## Rows: 5938 Columns: 12
+```
+
+```
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr (8): festival_id, title, sub_title, artist, description, genre, age_cate...
+## dbl (4): ...1, year, latitude, longitude
 ```
 
 ```
 ## 
-## ── Column specification ────────────────────────────────────────────────────────
-## cols(
-##   X1 = col_double(),
-##   festival_id = col_character(),
-##   title = col_character(),
-##   sub_title = col_character(),
-##   artist = col_character(),
-##   year = col_double(),
-##   description = col_character(),
-##   genre = col_character(),
-##   latitude = col_double(),
-##   longitude = col_double(),
-##   age_category = col_character(),
-##   ID = col_character()
-## )
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 If you're working on this document from your own computer ("locally") you can download the Edinburgh Fringe data in the following way:
@@ -101,7 +100,7 @@ colnames(edbfdata)
 ```
 
 ```
-##  [1] "X1"           "festival_id"  "title"        "sub_title"    "artist"      
+##  [1] "...1"         "festival_id"  "title"        "sub_title"    "artist"      
 ##  [6] "year"         "description"  "genre"        "latitude"     "longitude"   
 ## [11] "age_category" "ID"
 ```
@@ -116,7 +115,7 @@ glimpse(edbfdata)
 ```
 ## Rows: 5,938
 ## Columns: 12
-## $ X1           <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17…
+## $ ...1         <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17…
 ## $ festival_id  <chr> "book", "book", "book", "book", "book", "book", "book", "…
 ## $ title        <chr> "Denise Mina", "Alex T Smith", "Challenging Expectations …
 ## $ sub_title    <chr> "HARD MEN AND CARDBOARD GANGSTERS", NA, NA, "WHAT CAUSED …
@@ -144,7 +143,7 @@ head(evdes)
 ```
 
 ```
-## # A tibble: 6 x 2
+## # A tibble: 6 × 2
 ##   description                                                               year
 ##   <chr>                                                                    <dbl>
 ## 1 "<p>\n\tAs the grande dame of Scottish crime fiction, Denise Mina place…  2012
@@ -375,7 +374,7 @@ stop_words
 ```
 
 ```
-## # A tibble: 1,149 x 2
+## # A tibble: 1,149 × 2
 ##    word        lexicon
 ##    <chr>       <chr>  
 ##  1 a           SMART  
@@ -402,7 +401,7 @@ tidy_des %>%
 ```
 
 ```
-## # A tibble: 24,995 x 2
+## # A tibble: 24,995 × 2
 ##    word       n
 ##    <chr>  <int>
 ##  1 rsquo   5638
@@ -436,7 +435,7 @@ tidy_des %>%
 ```
 
 ```
-## # A tibble: 24,989 x 2
+## # A tibble: 24,989 × 2
 ##    word        n
 ##    <chr>   <int>
 ##  1 book     2088
@@ -469,7 +468,7 @@ head(edbf_term_counts)
 ```
 
 ```
-## # A tibble: 6 x 3
+## # A tibble: 6 × 3
 ## # Groups:   year [6]
 ##    year word      n
 ##   <dbl> <chr> <int>
@@ -499,7 +498,7 @@ head(edbf_term_counts)
 ```
 
 ```
-## # A tibble: 6 x 4
+## # A tibble: 6 × 4
 ## # Groups:   year [6]
 ##    year word      n womword
 ##   <dbl> <chr> <int>   <int>
@@ -539,7 +538,7 @@ head(edbf_counts)
 ```
 
 ```
-## # A tibble: 6 x 3
+## # A tibble: 6 × 3
 ##    year sum_wom year_total
 ##   <dbl>   <dbl>      <dbl>
 ## 1  2012      22      23146
@@ -653,7 +652,7 @@ head(babynames)
 ```
 
 ```
-## # A tibble: 6 x 5
+## # A tibble: 6 × 5
 ##    year sex   name          n   prop
 ##   <dbl> <chr> <chr>     <int>  <dbl>
 ## 1  1880 F     Mary       7065 0.0724
@@ -718,7 +717,7 @@ head(totprops)
 ```
 
 ```
-## # A tibble: 6 x 4
+## # A tibble: 6 × 4
 ##   name       prop totaln sex  
 ##   <chr>     <dbl>  <int> <chr>
 ## 1 Aaban         1      5 M    

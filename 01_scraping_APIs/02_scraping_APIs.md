@@ -3,7 +3,7 @@ title: "University of Edinburgh, Research Training Centre"
 subtitle: "Using APIs and web scraping"
 author:
   name: Christopher Barrie
-  affiliation: University of Edinburgh | [AMWs](https://github.com/cjbarrie/ED-AMW)
+  affiliation: University of Edinburgh | [AMWs](https://github.com/cjbarrie/ED-AMWs)
 # date: Lecture 6  #"12 January 2022"
 output: 
   html_document:
