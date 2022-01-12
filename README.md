@@ -7,7 +7,7 @@ Repo of teaching materials for Advanced Methods Workshops taught by Dr Christoph
 
 ## Using APIs and web scraping 
 
-- Slides \[[Slides](https://docs.google.com/presentation/d/1aQkAt3KoFvMsaZ_XRz2XTs1MsPqj5NbcpY0aqES8Ea4/edit?usp=sharing)\]
+- Slides \[[Slides](https://docs.google.com/presentation/d/1yShQ7UIdZL9Uwv8XQkEXJ9c3KoZuhHUT3bAxzny4T4M/edit?usp=sharing)\]
 - Screen scraping \[[Worksheet](https://raw.githack.com/cjbarrie/ED-AMWs/main/01_scraping_APIs/01_scraping_APIs.html)\]
 - APIs \[[Worksheet](https://raw.githack.com/cjbarrie/ED-AMWs/main/01_scraping_APIs/02_scraping_APIs.html)\]
 
