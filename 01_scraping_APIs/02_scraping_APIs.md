@@ -1,10 +1,10 @@
 ---
 title: "University of Edinburgh, Research Training Centre"
-subtitle: "Using APIs and web scraping "
+subtitle: "Using APIs and web scraping"
 author:
   name: Christopher Barrie
   affiliation: University of Edinburgh | [AMWs](https://github.com/cjbarrie/ED-AMW)
-# date: Lecture 6  #"05 January 2022"
+# date: Lecture 6  #"12 January 2022"
 output: 
   html_document:
     theme: flatly
@@ -19,11 +19,9 @@ bibliography: scrapeAPIs.bib
 ---
 
 
-# Working with Digital Data
+# Using APIs and web scraping
 
-The lecture material for today mentioned work by @Freelon2018a, @Bruns2019, @Puschmann2019, and @Lazer2020b as well as a [report](https://www.disinfobservatory.org/download/26541) by SOMA outlining solutions for research data exchange. 
-
-These example tasks use different sources of online data, and here I introduce you to how we might gather data through both screen-scraping (or server-side) techniques as well as API (or client-side) techniques. 
+In this worksheet, we will see how to access data through an API (the client side). The first example uses a dedicated package, which I created with Juston Ho and Chung-hong Chan, called <tt>academictwitteR</tt>; the second does not rely on a pre-packaged library and instead forces us to write our own `GET` requests to the API. This is the same as any R package or other pre-packaged library is doing---if you looked undernearth the hood of <tt>academictwitteR</tt> this is what you would find!
 
 ## Tutorial: APIs 
 
@@ -32,6 +30,8 @@ In this tutorial, you will learn how to:
 * Get developer access credentials to Twitter
 * Get Academic Research Product Track access credentials to Twitter
 * Use the <tt>academictwitteR</tt> package to query the Twitter API
+* Go through different ways to interact with the Twitter Academic API
+* Build our own `GET` requests with the <tt>httr</tt> package
 
 ## Setup 
 
@@ -108,7 +108,7 @@ Once you have the Bearer Token, you are ready to use `academictwitteR`!
 
 ##  Load data and packages 
 
-Before proceeding, we'll load the remaining packages we will need for this tutorial.
+Before proceeding, we'll load the remaining packages we will need for this section.
 
 
 ```r
@@ -133,231 +133,208 @@ In summary the Academic Research product track allows the authorized user:
 
 ## Querying the Twitter API with `academictwitteR`
 
-We begin by storing our access token with:
+The first task is set authorization credentials with the `set_bearer()` function, which allows the user to store their bearer token in the .Renviron file.
+
+To do so, use:
 
 
 ```r
-bearer_token = "AAAAAAAAAAAAAAAAAAAAA_INSERT_YOUR_TOKEN_HERE"
+set_bearer()
 ```
 
-The workhorse function of `academictwitteR` when it comes to collecting tweets containing a particular string or hashtag is `get_all_tweets()`.
+and enter authorization credentials as below:
 
+![](images/TWITTER_BEARER.gif)
 
-```r
-tweets <-
-  get_all_tweets(
-    "#BLM OR #BlackLivesMatter",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    file = "blmtweets"
-  )
-```
+This will mean that the bearer token is automatically called during API calls. It also avoids the inadvisable practice of hard-coding authorization credentials into scripts. 
 
-Here, we are collecting tweets containing one or both of two hashtags related to the Black Lives Matter movement over the period January 1, 2020 to January 5, 2020. 
+## Collecting tweets
 
-## Storage conventions in `academictwitteR`
-
-Given the sizeable increase in the volume of data potentially retrievable with the Academic Research Product Track, it is advisable that researchers establish clear storage conventions to mitigate data loss caused by e.g. the unplanned interruption of an API query.
-
-We first draw your attention first to the `file` argument in the code for the API query above.
-
-In the file path, the user can specify the name of a file to be stored with a ".rds" extension, which includes all of the tweet-level information collected for a given query.
-
-Alternatively, the user can specify a `data_path` as follows:
+The workhorse function is `get_all_tweets()`, which is able to collect tweets matching a specific search query or all tweets by a specific set of users.
 
 
 ```r
 tweets <-
   get_all_tweets(
-    "#BLM OR #BlackLivesMatter",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    data_path = "data/"
-    bind_tweets = FALSE
+    query = "#BlackLivesMatter",
+    start_tweets = "2020-01-01T00:00:00Z",
+    end_tweets = "2020-01-05T00:00:00Z",
+    file = "blmtweets",
+    data_path = "data/",
+    n = 1000000,
   )
 ```
 
-In the data path, the user can either specify a directory that already exists or name a new directory. In other words, if there is already a folder in your working directory called "data" then `get_all_tweets` will find it and store data there. If there is no such directory, then a directory named (here) "data" will be created in your working directory for the purposes of data storage.
+Here, we are collecting tweets containing a hashtag related to the Black Lives Matter movement over the period January 1, 2020 to January 5, 2020. 
 
-The data is stored in this folder as a series of JSONs. Tweet-level data is stored as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_".
-
-Note that the `get_all_tweets()` function always returns a data.frame object unless `data_path` is specified and `bind_tweets` is set to `FALSE`. When collecting large amounts of data, we recommend using the `data_path` option with `bind_tweets = FALSE`. This mitigates potential data loss in case the query is interrupted, and avoids system memory usage errors.
-
-## Binding JSON files into data.frame objects
-
-Users can then use the `bind_tweet_jsons` and `bind_user_jsons` convenience functions to bundle the JSONs into a data.frame object for analysis in R as such:
+We have also set an upper limit of one million tweets. When collecting large amounts of Twitter data we recommend including a `data_path` and setting `bind_tweets = FALSE` such that data is stored as JSON files and can be bound at a later stage upon completion of the API query.
 
 
 ```r
-tweets <- bind_tweet_jsons(data_path = "data/")
+tweets <-
+  get_all_tweets(
+    users = c("jack", "cbarrie"),
+    start_tweets = "2020-01-01T00:00:00Z",
+    end_tweets = "2020-01-05T00:00:00Z",
+    file = "blmtweets",
+    n = 1000
+  )
 ```
 
+Whereas here we are not specifying a search query and instead are requesting all tweets by users "@jack" and "@cbarrie" over the period January 1, 2020 to January 5, 2020. Here, we set an upper limit of 1000 tweets.
 
-```r
-users <- bind_user_jsons(data_path = "data/")
-```
-
-## Inspecting the data
-
-Let's say, as an example, we queried the Twitter API with the following code:
+The search query and user query arguments can be combined in a single API call as so:
 
 
 ```r
 get_all_tweets(
-  "#BLM OR #BlackLivesMatter",
-  "2020-01-01T00:00:00Z",
-  "2020-01-05T00:00:00Z",
-  bearer_token,
-  data_path = "data/academictwitteR_data",
-  file = "data/blmtweets",
-  bind_tweets = F
+  query = "twitter",
+  users = c("cbarrie", "jack"),
+  start_tweets = "2020-01-01T00:00:00Z",
+  end_tweets = "2020-05-01T00:00:00Z",
+  n = 1000
 )
 ```
 
-We can then look at the output in our directory of JSON files like this:
+Where here we would be collecting tweets by users "@jack" and "@cbarrie" over the period January 1, 2020 to January 5, 2020 containing the word "twitter."
 
 
 ```r
-list.files("data/academictwitteR_data")
+get_all_tweets(
+  query = c("twitter", "social"),
+  users = c("cbarrie", "jack"),
+  start_tweets = "2020-01-01T00:00:00Z",
+  end_tweets = "2020-05-01T00:00:00Z",
+  n = 1000
+)
 ```
 
-
-```
-##  [1] "data_1212161860600041475.json"  "data_1212202218138374144.json" 
-##  [3] "data_1212454140183547909.json"  "data_1212541396005064704.json" 
-##  [5] "data_1212602429998583808.json"  "data_1212745962499780610.json" 
-##  [7] "data_1212848819668340737.json"  "data_1212931998357966848.json" 
-##  [9] "data_1213102352925970433.json"  "data_1213244966530502656.json" 
-## [11] "data_1213425494068285442.json"  "query"                         
-## [13] "users_1212161860600041475.json" "users_1212202218138374144.json"
-## [15] "users_1212454140183547909.json" "users_1212541396005064704.json"
-## [17] "users_1212602429998583808.json" "users_1212745962499780610.json"
-## [19] "users_1212848819668340737.json" "users_1212931998357966848.json"
-## [21] "users_1213102352925970433.json" "users_1213244966530502656.json"
-## [23] "users_1213425494068285442.json"
-```
-
-, which we can then bind as follows:
-
-
-```r
-blmtweets <- bind_tweet_jsons("data/academictwitteR_data")
-```
-
-Or we can simply read in the data already stored in serialized format as a .rds file:
-
-
-```r
-blmtweets <- readRDS("data/blmtweets.rds")
-```
-
-And we'll end up with something like this:
-
-![](images/gifcap7.gif){width=100%}
-
-## Building a query 
-
-The v2 Twitter API allows for greater precision when making queries. A query might just be a single string like "happy new year" if you're interested on how people are celebrating on the night of December 31. Alternatively, the query might involve several additional operators that filter tweets with greater precision to return specific tweet content. 
-
-The following section guides you through the logics underpinning queries to the Twitter API. For full information on these logics you may additionally wish to consult the Twitter API documentation on how to build a query [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query).
-
-As above, for a particular set of hashtags a call may look like:
-
-
-```r
-bearer_token <- "" # Insert bearer token
-
-tweets <-
-  get_all_tweets(
-    "#BLM OR #BlackLivesMatter",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token
-  )
-```
-
-Alternatively, we can specify a character string comprising several elements. For example, we if we wanted to search multiple hashtags, we could specify a query as follows:
-
-
-```r
-bearer_token <- "" # Insert bearer token
-
-htagquery <- c("#BLM", "#BlackLivesMatter", "#GeorgeFloyd")
-
-tweets <-
-  get_all_tweets(
-    htagquery,
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token
-  )
-```
-
-, which will achieve the same thing as typing out `OR` between our strings.  
+While here we are collecting tweets by users "@jack" and "@cbarrie" over the period January 1, 2020 to January 5, 2020 containing the words "twitter" or "social."
 
 Note that the "AND" operator is implicit when specifying more than one character string in the query. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets. Thus, when searching for all elements of a character string, a call may look like:
 
 
 ```r
-bearer_token <- "" # Insert bearer token
-
-tweets <-
-  get_all_tweets("apples oranges",
-                 "2020-01-01T00:00:00Z",
-                 "2020-01-05T00:00:00Z",
-                 bearer_token)
+get_all_tweets(
+  query = c("twitter social"),
+  users = c("cbarrie", "jack"),
+  start_tweets = "2020-01-01T00:00:00Z",
+  end_tweets = "2020-05-01T00:00:00Z",
+  n = 1000
+)
 ```
 
-, which will capture tweets containing *both* the words "apples" and "oranges." The same logic applies for hashtag queries.
+, which will capture tweets containing *both* the words "twitter" and "social." The same logics apply for hashtag queries.
 
-## Building a query manually
+Whereas if we specify our query as separate elements of a character vector like this:
 
-With `academictwitteR` you have two main options when building a query. The first is to do it "manually" by following the documentation provided by Twitter (linked above) and pasting in the relevant operators to your query.
 
-Here's how you might achieve this, using the `get_all_tweets()` function:
+```r
+get_all_tweets(
+  query = c("twitter", "social"),
+  users = c("cbarrie", "jack"),
+  start_tweets = "2020-01-01T00:00:00Z",
+  end_tweets = "2020-05-01T00:00:00Z",
+  n = 1000
+)
+```
+, this will be capturing tweets by users "@cbarrie" or "@jack" containing the words "twitter" *or* social. 
+
+Finally, we may wish to query an exact phrase. To do so, we can either input the phrase in escape quotes, e.g., `query ="\"Black Lives Matter\""` or we can use the optional parameter `exact_phrase = T` to search for tweets containing the exact phrase string:
 
 
 ```r
 tweets <-
   get_all_tweets(
-    "#BLM OR #BlackLivesMatter",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    data_path = "data/"
-    bind_tweets = FALSE
+    query = "#BlackLivesMatter",
+    start_tweets = "2020-01-01T00:00:00Z",
+    end_tweets = "2020-01-05T00:00:00Z",
+    file = "blmtweets",
+    data_path = "data/",
+    n = 1000000,
   )
 ```
 
-We begin with the same query as used in examples above, which searches for tweets containing one or both of the specified hashtags relating to the Black Lives Matter movement. We may, however, want to be more precise with our query. Let's say we were only interested in tweets written in English and originating from the US. We would add several operators to our query to filter by these characteristics:
+Here, we are collecting tweets containing a hashtag related to the Black Lives Matter movement over the period January 1, 2020 to January 5, 2020. 
+
+## Building a query 
+
+The v2 Twitter API allows for greater precision when making queries. A query might just be a single string like "happy new year" if you're interested on how people are celebrating on the night of December 31. Alternatively, the query might involve several additional operators that filter tweets with greater precision to return specific tweet content. 
+
+This vignette guides you through the logics underpinning queries to the Twitter API. For full information on these logics you may additionally wish to consult the Twitter API documentation on how to build a query [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query).
+
+## Query strings
+
+We first load our package into memory with:
+
+
+```r
+library(academictwitteR)
+```
+
+We then make sure we have set our bearer token appropriately by calling:
+
+
+```r
+get_bearer()
+```
+
+
+```
+## [1] "AAAAAAAAAAAAAAAAAAAAAPw%2BJQEAAAAAq5Ot8BBYyYlAqT9nLMuVuR1jI5fA%3DqG9HTHISISNOTAREALTOKEN"
+```
+
+Let's say we were interested in what people were talking about on New Year's Eve. We might do something like this:
 
 
 ```r
 tweets <-
   get_all_tweets(
-    "#BLM OR #BlackLivesMatter place_country:US lang:en",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    data_path = "data/",
-    bind_tweets = FALSE
+    query = "happy",
+    start_tweets = "2019-12-31T10:00:00Z",
+    end_tweets = "2020-01-01T10:00:00Z",
+    n = 10000
   )
 ```
 
-Let's further say that we weren't interested in retweets, and that we were only interested in tweets that contained an image. We would then narrow down our query further:
+Note here that we have also specified an upper limit of 10,000 tweets. The default is 100. For most applications, the user will need to specify a higher n than the default. 
+
+The default upper limit is set to 100 in order to prevent unnecessary ingests of data when e.g. trialling an API call.
+
+As an alternative to this, the user might also wish to use the `count_all_tweets()` function in order to get an idea of how many tweets match the specified API query.
+
+## Additional parameters
+
+In the above we search for all tweets between two dates that contain the string "happy." But what if we were only interested in a particular region or written in a particular language?
+
+Let's say we were only interested in tweets written in English and originating from the US. We would add several operators to our query to filter by these characteristics:
 
 
 ```r
 tweets <-
   get_all_tweets(
-    "#BLM OR #BlackLivesMatter place_country:US lang:en -is:retweet has:images",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    data_path = "data/",
-    bind_tweets = FALSE
+    query = "happy",
+    start_tweets = "2019-12-31T10:00:00Z",
+    end_tweets = "2020-01-01T10:00:00Z",
+    country = "US", 
+    lang = "en"
+  )
+```
+
+In fact, the `get_all_tweets()` function can be combined with multiple additional filtering parameters. The example below includes numerous additional filters, keeping only tweets with images, hashtags, and mentions:
+
+
+```r
+tweets <-
+  get_all_tweets(
+    query = "happy",
+    start_tweets = "2019-12-31T10:00:00Z",
+    end_tweets = "2020-01-01T10:00:00Z",
+    country = "US", 
+    lang = "en",
+    has_images = TRUE,
+    has_hashtags = TRUE,
+    has_mentions = TRUE
   )
 ```
 
@@ -367,12 +344,15 @@ We might then decide that our geo filter is not accurate enough. We don't just w
 ```r
 tweets <-
   get_all_tweets(
-    "#BLM OR #BlackLivesMatter place_country:US place:seattle lang:en -is:retweet has:images",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    data_path = "data/",
-    bind_tweets = FALSE
+    query = "happy",
+    start_tweets = "2019-12-31T10:00:00Z",
+    end_tweets = "2020-01-01T10:00:00Z",
+    country = "US", 
+    place = "seattle",
+    lang = "en",
+    has_images = TRUE,
+    has_hashtags = TRUE,
+    has_mentions = TRUE
   )
 ```
 
@@ -380,141 +360,316 @@ What if we were unsatisfied with the accuracy of our geo parameters and we wante
 
 ![](images/seattle.png){width=70%}
 
-Twitter also allows us to query tweets originating from within a particular geographical buffer too. Here, we simply specify the longitude and latitude of the southwest and then the northeast corners of this bounding box. Note, this image is taken from a screenshot of the website [http://bboxfinder.com](http://bboxfinder.com). Many such websites exist that allow you to find the bounding box coordinates of a place of interest, including [https://www.openstreetmap.org](https://www.openstreetmap.org) and [https://boundingbox.klokantech.com/](https://boundingbox.klokantech.com/).
+Twitter also allows us to query tweets originating from within a particular geographical buffer too. Here, we simply specify the longitude and latitude of the southwest and then the northeast corners of this bounding box. Note, this image is taken from a screenshot of the website [http://bboxfinder.com](http://bboxfinder.com). 
 
-We can then input this information with the "bounding_box" operator as below:
+Many such websites exist that allow you to find the bounding box coordinates of a place of interest, including [https://www.openstreetmap.org](https://www.openstreetmap.org) and [https://boundingbox.klokantech.com/](https://boundingbox.klokantech.com/).
+
+We can then input this information with the Twitter "bounding_box" operator using the `bbox` argument as below:
+
 
 
 ```r
 tweets <-
   get_all_tweets(
-    "#BLM OR #BlackLivesMatter bounding_box:[-122.375679 47.563554 -122.266159 47.643417] lang:en -is:retweet has:images",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    data_path = "data/",
-    bind_tweets = FALSE
+    query = "happy",
+    start_tweets = "2019-12-31T10:00:00Z",
+    end_tweets = "2020-01-01T10:00:00Z",
+    country = "US", 
+    place = "seattle",
+    lang = "en",
+    has_images = TRUE,
+    has_hashtags = TRUE,
+    has_mentions = TRUE,
+    bbox = c(-122.375679, 47.563554, -122.266159, 47.643417)
   )
 ```
 
-## Building a query with `build_query()`
-
-Alternatively, you can use the convenience function `build_query()` included in the `academictwitteR` package. 
-
-The function comes with multiple optional parameters, which can be combined to generate a more precise query. This can then be passed to an object, here called "query," which can then be entered into the `get_all_tweets()` function as our query. Alternatively, the `build_query` arguments (with the exception of the `geo_query` argument) can be added as additional arguments into the `get_all_tweets` function. 
-
-The below provides an example, and prints the out output of the function. Here, we are building a query for the #BLM hashtag, specifying that we do not want to capture retweets, that we want tweets to originate from London, that we don't want to capture any promoted tweets, that we want the tweets to contain  URLs, that we want it to contain videos, and that they are written in English. 
+The alternative `point_radius` argument requires three pieces of information: the longitude and latitude of a target coordinate, and the buffer size around that coordinate.
 
 
 ```r
-query <- build_query(query = "#BLM", is_retweet = FALSE, place = "London", remove_promoted = TRUE, has_links = TRUE, has_videos = TRUE, lang = "en")
-
-query
-```
-
-```
-## [1] "#BLM -is:retweet -is:nullcast has:links has:videos place:London lang:en"
-```
-
-We can also enter geographical information with the `build_query()` function. Our two options here are the `point_radius` and `bbox` arguments. Both of these take numeric vectors as inputs. The `point_radius` argument requires three pieces of information: the longitude and latitude of a target coordinate, and the buffer size around that coordinate. The `bbox` argument, which stands for "bounding box," requires four pieces of information: the longitude and latitude of the southwest corner of the bounding box and the longitude and latitude of the northeast corner of the bounding box.
-
-To build a query including a filter by point radius, we might use:
-
-
-```r
-query <-
-  build_query(
-    query = "#BLM",
-    point_radius = c(-0.131969125179604, 51.50847878040284, 25)
+tweets <-
+  get_all_tweets(
+    query = "happy",
+    start_tweets = "2019-12-31T10:00:00Z",
+    end_tweets = "2020-01-01T10:00:00Z",
+    country = "US", 
+    place = "seattle",
+    lang = "en",
+    point_radius = c(-122.33795253639994, 47.60900846404393, 25)
   )
-
-query
-```
-
-```
-## [1] "#BLM point_radius:[-0.131969125179604 51.5084787804028 25mi]"
 ```
 
 Note that the maximum radius for the buffer is 25 miles. Similarly, the maximum height and width of any bounding box is 25 miles. Inputting coordinate information that exceeds these bounds will result in a 400 status code error.
 
-To make things a bit simpler, the `build_query()` function also includes prompts for entering parameters that require more precise geographical information, like the "bounding_box" or "point_radius" parameters for which we can submit queries to the Twitter API. These can be called by setting the `geo_query` argument to `TRUE` as so:
+## Building API calls
 
+In the above we created our own API calls. If we wanted to build our own, then we could do so without the use of a bespoke package like <tt>academictwitteR</tt>. For this, we will need the <tt>httr</tt> package, which is useful for for making requests to HTTP servers. The following section builds from a book chapter authored by Chung-hong Chan [here](https://bookdown.org/paul/apis_for_social_scientists/twitter-api.html).
 
-
-```r
-query <- build_query(query = "#BLM", geo_query = TRUE)
-```
-
-```
-Which geo buffer type type do you want? 
-
-1: Point radius
-2: Bounding box
-```
-
-If we select option 1, we will then be prompted to enter the longitude, latitude, and radius of the buffer emanating outwards from this coordinate as below, where I enter the same information as we did above:
-
-```
-Selection: 1
-What is longitude? -0.131969125179604
-What is latitude? 51.50847878040284
-What is radius? 25
-
-```
-
-
-
-And we see that the end result is the same as the above:
+If we already have our authorization "bearer token" from Twitter and we have stored it appropriately.
 
 
 ```r
-query
+library(httr)
 ```
-
-```
-## [1] "#BLM -is:retweet point_radius:[-0.131969125179604 51.50847878040284 25mi]"
-```
-
-Note that `build_query()` can also take a character vector of strings as query. This will produce the equivalent of typing "OR" between our target strings. Let's say we were interested in multiple hashtags and not just one. We could still build a query to filter our tweets by the parameters discussed above as follows:
 
 
 ```r
-htagquery <- c("#BLM", "#BlackLivesMatter", "#GeorgeFloyd")
-
-query <-
-  build_query(
-    query = htagquery,
-    is_retweet = FALSE,
-    place = "London",
-    remove_promoted = TRUE,
-    has_links = TRUE,
-    has_videos = TRUE,
-    lang = "en"
-  )
-
-query
+paste0("bearer ", Sys.getenv("TWITTER_BEARER"))
 ```
-
-```
-## [1] "(#BLM OR #BlackLivesMatter OR #GeorgeFloyd) -is:retweet -is:nullcast has:links has:videos place:London lang:en"
-```
-
-And if you wanted to just call `build_query()` within the `get_all_tweets()` function (rather than building it separately) you could do this too:
 
 
 ```r
-tweets <-
-  get_all_tweets(
-    "#BLM OR #BlackLivesMatter",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    data_path = "data/",
-    bind_tweets = FALSE,
-    lang = "en",
-    is_retweet = F,
-    has_images = T
-  )
+my_query <- "#BLM lang:EN"
+
+endpoint_url <- "https://api.twitter.com/2/tweets/search/all"
+
+params <- list(
+  "query" = my_query,
+  "start_time" = "2021-01-01T00:00:00Z",
+  "end_time" = "2021-07-31T23:59:59Z",
+  "max_results" = 20
+)
+
+r <- httr::GET(url = endpoint_url,
+               httr::add_headers(
+                       Authorization = paste0("bearer ", Sys.getenv("TWITTER_BEARER"))),
+               query = params)
 ```
 
-, which would search for tweets containing the Black Lives Matter hashtags, in English, removing RTs, and containing images. Voilá!
+And we can then look at the content of this as so:
+
+
+```r
+content(r, as = "text")
+```
+
+```
+## [1] "{\"data\":[{\"id\":\"1421621589024514049\",\"text\":\"Dolly Parton used royalties off Whitney Houston’s hit song to support Black community. What a class act! #payitforward #blm #community #dollyparton  https://t.co/iWJpX81kzs\"},{\"id\":\"1421621587737030657\",\"text\":\"RT @Jaxzon2008: “A recent report conducted by BuzzFeed revealed that sundown towns — once thought to be a relic of the Jim Crow era — are s…\"},{\"id\":\"1421621559781908481\",\"text\":\"The Story of Olive Lucas (Part One) by Mary Robinson https://t.co/wxeoBXQJch #WWII #BlackHistory #nursing #BLM #BlackLivesMatter\"},{\"id\":\"1421621538650935301\",\"text\":\"RT @Jaxzon2008: We have All folks from different races fighting for Black folks. William Lloyd Garrison, a White man, is a prime example wh…\"},{\"id\":\"1421621527456346119\",\"text\":\"RT @kk131066: https://t.co/dUqbTl5EDK\\n\\nTo defeat the devil, we must know how he operates &amp; speak his language\\n\\nDon't go high when they go l…\"},{\"id\":\"1421621505612337154\",\"text\":\"RT @Jaxzon2008: THIS NEEDS TO BE RETWEETED:\\n\\nTFG “personally phoned the apolitical Justice Department to pressure the Acting Attorney Gener…\"},{\"id\":\"1421621382123753473\",\"text\":\"Black\\n#BLm https://t.co/cN1i5xLE4J\"},{\"id\":\"1421621377329766400\",\"text\":\"RT @Jaxzon2008: In OK, a white mob took Marie Scott a Black teen from her cell and hung her. Blacks were always falsely accused of wrongful…\"},{\"id\":\"1421621288620134401\",\"text\":\"This Bear playing Dead by daylight ... heart monitor       #BLM #LGBT #loveislove https://t.co/Ef1gEJ1qp3\"},{\"id\":\"1421621206394933249\",\"text\":\"RT @kk131066: https://t.co/Feae919hds\\n\\n#racist democracy doesn't exist\\nDemocracy with #Racists - IMPOSSIBLE\\n\\n#democracy protects #HumanRigh…\"},{\"id\":\"1421621046910799872\",\"text\":\"RT @Jaxzon2008: THIS NEEDS TO BE RETWEETED:\\n\\nTFG “personally phoned the apolitical Justice Department to pressure the Acting Attorney Gener…\"},{\"id\":\"1421620949217067008\",\"text\":\"RT @PeterMerlinCane: @davenewworld_2 If you would like to advise Tommy Bryant what you think of his outburst and refusal to apologize, you…\"},{\"id\":\"1421620935208095747\",\"text\":\"RT @Jaxzon2008: We have All folks from different races fighting for Black folks. William Lloyd Garrison, a White man, is a prime example wh…\"},{\"id\":\"1421620803347550213\",\"text\":\"RT @Why_U_Here_: @sossaholicx These a blk men — Nubian kangz, stop trying to separate the blk community. Blk comes in all shades #BLM ✊\\uD83C\\uDFFE✊\\uD83C\\uDFFE✊\\uD83C\\uDFFE\"},{\"id\":\"1421620756761432071\",\"text\":\"RT @PaulDereume: My mother's side of the family goes back to Richard Mather &amp; this story about Onesimus, who shared a revolutionary way to…\"},{\"id\":\"1421620408340549640\",\"text\":\"RT @blaze0497: ICYMI - Video: Cops, Fed Up with Violent ‘Protesters’ in Downtown LA, Toss #BLM- #Antifa Like Rag Dolls\\n\\nhttps://t.co/xSBOlj…\"},{\"id\":\"1421620189494321153\",\"text\":\"Poem by Mike Wilson,  photo by Tom Roberts https://t.co/mRCG1o54d0 #SaveDemocracy #truthmatters #republicansaretheproblem #fascism #progressive #arrangingdeckchairsonthetitanic #socialjustice #BLM #ClimateEmergency #savetheplanet #apocalypse https://t.co/zWOIx639Ho\"}],\"meta\":{\"newest_id\":\"1421621589024514049\",\"oldest_id\":\"1421620189494321153\",\"result_count\":17,\"next_token\":\"b26v89c19zqg8o3fpdm6w47ntj6a8d5rc9kikn3ik5u2l\"}}"
+```
+
+And we see that the output is almost as scary as the web-scraping example before!
+
+We could make things look a bit nicer by using:
+
+
+```r
+content(r, as = "parsed")
+```
+
+```
+## $data
+## $data[[1]]
+## $data[[1]]$id
+## [1] "1421621589024514049"
+## 
+## $data[[1]]$text
+## [1] "Dolly Parton used royalties off Whitney Houston’s hit song to support Black community. What a class act! #payitforward #blm #community #dollyparton  https://t.co/iWJpX81kzs"
+## 
+## 
+## $data[[2]]
+## $data[[2]]$id
+## [1] "1421621587737030657"
+## 
+## $data[[2]]$text
+## [1] "RT @Jaxzon2008: “A recent report conducted by BuzzFeed revealed that sundown towns — once thought to be a relic of the Jim Crow era — are s…"
+## 
+## 
+## $data[[3]]
+## $data[[3]]$id
+## [1] "1421621559781908481"
+## 
+## $data[[3]]$text
+## [1] "The Story of Olive Lucas (Part One) by Mary Robinson https://t.co/wxeoBXQJch #WWII #BlackHistory #nursing #BLM #BlackLivesMatter"
+## 
+## 
+## $data[[4]]
+## $data[[4]]$id
+## [1] "1421621538650935301"
+## 
+## $data[[4]]$text
+## [1] "RT @Jaxzon2008: We have All folks from different races fighting for Black folks. William Lloyd Garrison, a White man, is a prime example wh…"
+## 
+## 
+## $data[[5]]
+## $data[[5]]$id
+## [1] "1421621527456346119"
+## 
+## $data[[5]]$text
+## [1] "RT @kk131066: https://t.co/dUqbTl5EDK\n\nTo defeat the devil, we must know how he operates &amp; speak his language\n\nDon't go high when they go l…"
+## 
+## 
+## $data[[6]]
+## $data[[6]]$id
+## [1] "1421621505612337154"
+## 
+## $data[[6]]$text
+## [1] "RT @Jaxzon2008: THIS NEEDS TO BE RETWEETED:\n\nTFG “personally phoned the apolitical Justice Department to pressure the Acting Attorney Gener…"
+## 
+## 
+## $data[[7]]
+## $data[[7]]$id
+## [1] "1421621382123753473"
+## 
+## $data[[7]]$text
+## [1] "Black\n#BLm https://t.co/cN1i5xLE4J"
+## 
+## 
+## $data[[8]]
+## $data[[8]]$id
+## [1] "1421621377329766400"
+## 
+## $data[[8]]$text
+## [1] "RT @Jaxzon2008: In OK, a white mob took Marie Scott a Black teen from her cell and hung her. Blacks were always falsely accused of wrongful…"
+## 
+## 
+## $data[[9]]
+## $data[[9]]$id
+## [1] "1421621288620134401"
+## 
+## $data[[9]]$text
+## [1] "This Bear playing Dead by daylight ... heart monitor       #BLM #LGBT #loveislove https://t.co/Ef1gEJ1qp3"
+## 
+## 
+## $data[[10]]
+## $data[[10]]$id
+## [1] "1421621206394933249"
+## 
+## $data[[10]]$text
+## [1] "RT @kk131066: https://t.co/Feae919hds\n\n#racist democracy doesn't exist\nDemocracy with #Racists - IMPOSSIBLE\n\n#democracy protects #HumanRigh…"
+## 
+## 
+## $data[[11]]
+## $data[[11]]$id
+## [1] "1421621046910799872"
+## 
+## $data[[11]]$text
+## [1] "RT @Jaxzon2008: THIS NEEDS TO BE RETWEETED:\n\nTFG “personally phoned the apolitical Justice Department to pressure the Acting Attorney Gener…"
+## 
+## 
+## $data[[12]]
+## $data[[12]]$id
+## [1] "1421620949217067008"
+## 
+## $data[[12]]$text
+## [1] "RT @PeterMerlinCane: @davenewworld_2 If you would like to advise Tommy Bryant what you think of his outburst and refusal to apologize, you…"
+## 
+## 
+## $data[[13]]
+## $data[[13]]$id
+## [1] "1421620935208095747"
+## 
+## $data[[13]]$text
+## [1] "RT @Jaxzon2008: We have All folks from different races fighting for Black folks. William Lloyd Garrison, a White man, is a prime example wh…"
+## 
+## 
+## $data[[14]]
+## $data[[14]]$id
+## [1] "1421620803347550213"
+## 
+## $data[[14]]$text
+## [1] "RT @Why_U_Here_: @sossaholicx These a blk men — Nubian kangz, stop trying to separate the blk community. Blk comes in all shades #BLM ✊🏾✊🏾✊🏾"
+## 
+## 
+## $data[[15]]
+## $data[[15]]$id
+## [1] "1421620756761432071"
+## 
+## $data[[15]]$text
+## [1] "RT @PaulDereume: My mother's side of the family goes back to Richard Mather &amp; this story about Onesimus, who shared a revolutionary way to…"
+## 
+## 
+## $data[[16]]
+## $data[[16]]$id
+## [1] "1421620408340549640"
+## 
+## $data[[16]]$text
+## [1] "RT @blaze0497: ICYMI - Video: Cops, Fed Up with Violent ‘Protesters’ in Downtown LA, Toss #BLM- #Antifa Like Rag Dolls\n\nhttps://t.co/xSBOlj…"
+## 
+## 
+## $data[[17]]
+## $data[[17]]$id
+## [1] "1421620189494321153"
+## 
+## $data[[17]]$text
+## [1] "Poem by Mike Wilson,  photo by Tom Roberts https://t.co/mRCG1o54d0 #SaveDemocracy #truthmatters #republicansaretheproblem #fascism #progressive #arrangingdeckchairsonthetitanic #socialjustice #BLM #ClimateEmergency #savetheplanet #apocalypse https://t.co/zWOIx639Ho"
+## 
+## 
+## 
+## $meta
+## $meta$newest_id
+## [1] "1421621589024514049"
+## 
+## $meta$oldest_id
+## [1] "1421620189494321153"
+## 
+## $meta$result_count
+## [1] 17
+## 
+## $meta$next_token
+## [1] "b26v89c19zqg8o3fpdm6w47ntj6a8d5rc9kikn3ik5u2l"
+```
+
+Or we could think about curating these data as a more friendly `data.frame` object, using a handy function from <tt>plyr</tt>, as follows:
+
+
+```r
+library(plyr)
+```
+
+```
+## ------------------------------------------------------------------------------
+```
+
+```
+## You have loaded plyr after dplyr - this is likely to cause problems.
+## If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
+## library(plyr); library(dplyr)
+```
+
+```
+## ------------------------------------------------------------------------------
+```
+
+```
+## 
+## Attaching package: 'plyr'
+```
+
+```
+## The following objects are masked from 'package:dplyr':
+## 
+##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+##     summarize
+```
+
+```
+## The following object is masked from 'package:purrr':
+## 
+##     compact
+```
+
+```r
+content <- content(r)
+
+contentdf <- ldply(content$data, data.frame)
+
+head(contentdf)
+```
+
+```
+##                    id
+## 1 1421621589024514049
+## 2 1421621587737030657
+## 3 1421621559781908481
+## 4 1421621538650935301
+## 5 1421621527456346119
+## 6 1421621505612337154
+##                                                                                                                                                                           text
+## 1 Dolly Parton used royalties off Whitney Houston’s hit song to support Black community. What a class act! #payitforward #blm #community #dollyparton  https://t.co/iWJpX81kzs
+## 2                                 RT @Jaxzon2008: “A recent report conducted by BuzzFeed revealed that sundown towns — once thought to be a relic of the Jim Crow era — are s…
+## 3                                             The Story of Olive Lucas (Part One) by Mary Robinson https://t.co/wxeoBXQJch #WWII #BlackHistory #nursing #BLM #BlackLivesMatter
+## 4                                 RT @Jaxzon2008: We have All folks from different races fighting for Black folks. William Lloyd Garrison, a White man, is a prime example wh…
+## 5                         RT @kk131066: https://t.co/dUqbTl5EDK\n\nTo defeat the devil, we must know how he operates &amp; speak his language\n\nDon't go high when they go l…
+## 6                               RT @Jaxzon2008: THIS NEEDS TO BE RETWEETED:\n\nTFG “personally phoned the apolitical Justice Department to pressure the Acting Attorney Gener…
+```

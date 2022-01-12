@@ -19,11 +19,9 @@ bibliography: scrapeAPIs.bib
 ---
 
 
-# Working with Digital Data
+# Using APIs and web scraping
 
-The lecture material for today mentioned work by @Freelon2018a, @Bruns2019, @Puschmann2019, and @Lazer2020b as well as a [report](https://www.disinfobservatory.org/download/26541) by SOMA outlining solutions for research data exchange. 
-
-These example tasks use different sources of online data, and here I introduce you to how we might gather data through both screen-scraping (or server-side) techniques as well as API (or client-side) techniques. 
+In this worksheet, I introduce you to how we might gather data through screen-scraping (or server-side) techniques; the second worksheet will go through an example of how we use API (or client-side) techniques for gathering data. 
 
 ## Tutorial: Screen-scraping 
 

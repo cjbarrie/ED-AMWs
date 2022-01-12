@@ -1,6 +1,6 @@
 ---
 title: "University of Edinburgh, Research Training Centre"
-subtitle: "Using APIs and web scraping "
+subtitle: "Using APIs and web scraping"
 author:
   name: Christopher Barrie
   affiliation: University of Edinburgh | [AMWs](https://github.com/cjbarrie/ED-AMW)
@@ -19,11 +19,9 @@ bibliography: scrapeAPIs.bib
 ---
 
 
-# Working with Digital Data
+# Using APIs and web scraping
 
-The lecture material for today mentioned work by @Freelon2018a, @Bruns2019, @Puschmann2019, and @Lazer2020b as well as a [report](https://www.disinfobservatory.org/download/26541) by SOMA outlining solutions for research data exchange. 
-
-These example tasks use different sources of online data, and here I introduce you to how we might gather data through both screen-scraping (or server-side) techniques as well as API (or client-side) techniques. 
+In this worksheet, we will see how to access data through an API (the client side). The first example uses a dedicated package, which I created with Juston Ho and Chung-hong Chan, called <tt>academictwitteR</tt>; the second does not rely on a pre-packaged library and instead forces us to write our own `GET` requests to the API. This is the same as any R package or other pre-packaged library is doing---if you looked undernearth the hood of <tt>academictwitteR</tt> this is what you would find!
 
 ## Tutorial: APIs 
 
@@ -32,6 +30,8 @@ In this tutorial, you will learn how to:
 * Get developer access credentials to Twitter
 * Get Academic Research Product Track access credentials to Twitter
 * Use the <tt>academictwitteR</tt> package to query the Twitter API
+* Go through different ways to interact with the Twitter Academic API
+* Build our own `GET` requests with the <tt>httr</tt> package
 
 ## Setup 
 
@@ -108,7 +108,7 @@ Once you have the Bearer Token, you are ready to use `academictwitteR`!
 
 ##  Load data and packages 
 
-Before proceeding, we'll load the remaining packages we will need for this tutorial.
+Before proceeding, we'll load the remaining packages we will need for this section.
 
 ```{r, message=F}
 library(tidyverse) # loads dplyr, ggplot2, and others
@@ -132,255 +132,232 @@ In summary the Academic Research product track allows the authorized user:
 
 ## Querying the Twitter API with `academictwitteR`
 
-We begin by storing our access token with:
+The first task is set authorization credentials with the `set_bearer()` function, which allows the user to store their bearer token in the .Renviron file.
 
-```{r setup}
-bearer_token = "AAAAAAAAAAAAAAAAAAAAA_INSERT_YOUR_TOKEN_HERE"
+To do so, use:
+
+```{r, eval=F}
+set_bearer()
 ```
 
-The workhorse function of `academictwitteR` when it comes to collecting tweets containing a particular string or hashtag is `get_all_tweets()`.
+and enter authorization credentials as below:
+
+![](images/TWITTER_BEARER.gif)
+
+This will mean that the bearer token is automatically called during API calls. It also avoids the inadvisable practice of hard-coding authorization credentials into scripts. 
+
+## Collecting tweets
+
+The workhorse function is `get_all_tweets()`, which is able to collect tweets matching a specific search query or all tweets by a specific set of users.
 
 ```{r, eval=F}
 
 tweets <-
   get_all_tweets(
-    "#BLM OR #BlackLivesMatter",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    file = "blmtweets"
+    query = "#BlackLivesMatter",
+    start_tweets = "2020-01-01T00:00:00Z",
+    end_tweets = "2020-01-05T00:00:00Z",
+    file = "blmtweets",
+    data_path = "data/",
+    n = 1000000,
   )
   
 ```
 
-Here, we are collecting tweets containing one or both of two hashtags related to the Black Lives Matter movement over the period January 1, 2020 to January 5, 2020. 
+Here, we are collecting tweets containing a hashtag related to the Black Lives Matter movement over the period January 1, 2020 to January 5, 2020. 
 
-## Storage conventions in `academictwitteR`
-
-Given the sizeable increase in the volume of data potentially retrievable with the Academic Research Product Track, it is advisable that researchers establish clear storage conventions to mitigate data loss caused by e.g. the unplanned interruption of an API query.
-
-We first draw your attention first to the `file` argument in the code for the API query above.
-
-In the file path, the user can specify the name of a file to be stored with a ".rds" extension, which includes all of the tweet-level information collected for a given query.
-
-Alternatively, the user can specify a `data_path` as follows:
+We have also set an upper limit of one million tweets. When collecting large amounts of Twitter data we recommend including a `data_path` and setting `bind_tweets = FALSE` such that data is stored as JSON files and can be bound at a later stage upon completion of the API query.
 
 ```{r, eval=F}
 
 tweets <-
   get_all_tweets(
-    "#BLM OR #BlackLivesMatter",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    data_path = "data/"
-    bind_tweets = FALSE
+    users = c("jack", "cbarrie"),
+    start_tweets = "2020-01-01T00:00:00Z",
+    end_tweets = "2020-01-05T00:00:00Z",
+    file = "blmtweets",
+    n = 1000
   )
   
 ```
 
-In the data path, the user can either specify a directory that already exists or name a new directory. In other words, if there is already a folder in your working directory called "data" then `get_all_tweets` will find it and store data there. If there is no such directory, then a directory named (here) "data" will be created in your working directory for the purposes of data storage.
+Whereas here we are not specifying a search query and instead are requesting all tweets by users "@jack" and "@cbarrie" over the period January 1, 2020 to January 5, 2020. Here, we set an upper limit of 1000 tweets.
 
-The data is stored in this folder as a series of JSONs. Tweet-level data is stored as a series of JSONs beginning "data_"; User-level data is stored as a series of JSONs beginning "users_".
-
-Note that the `get_all_tweets()` function always returns a data.frame object unless `data_path` is specified and `bind_tweets` is set to `FALSE`. When collecting large amounts of data, we recommend using the `data_path` option with `bind_tweets = FALSE`. This mitigates potential data loss in case the query is interrupted, and avoids system memory usage errors.
-
-## Binding JSON files into data.frame objects
-
-Users can then use the `bind_tweet_jsons` and `bind_user_jsons` convenience functions to bundle the JSONs into a data.frame object for analysis in R as such:
-
-```{r, eval=FALSE}
-
-tweets <- bind_tweet_jsons(data_path = "data/")
-
-```
-
-```{r, eval=FALSE}
-
-users <- bind_user_jsons(data_path = "data/")
-
-```
-
-## Inspecting the data
-
-Let's say, as an example, we queried the Twitter API with the following code:
+The search query and user query arguments can be combined in a single API call as so:
 
 ```{r, eval=F}
 
 get_all_tweets(
-  "#BLM OR #BlackLivesMatter",
-  "2020-01-01T00:00:00Z",
-  "2020-01-05T00:00:00Z",
-  bearer_token,
-  data_path = "data/academictwitteR_data",
-  file = "data/blmtweets",
-  bind_tweets = F
+  query = "twitter",
+  users = c("cbarrie", "jack"),
+  start_tweets = "2020-01-01T00:00:00Z",
+  end_tweets = "2020-05-01T00:00:00Z",
+  n = 1000
 )
 
 ```
 
-We can then look at the output in our directory of JSON files like this:
+Where here we would be collecting tweets by users "@jack" and "@cbarrie" over the period January 1, 2020 to January 5, 2020 containing the word "twitter."
 
 ```{r, eval=F}
 
-list.files("data/academictwitteR_data")
+get_all_tweets(
+  query = c("twitter", "social"),
+  users = c("cbarrie", "jack"),
+  start_tweets = "2020-01-01T00:00:00Z",
+  end_tweets = "2020-05-01T00:00:00Z",
+  n = 1000
+)
 
 ```
 
-```{r, echo=F}
+While here we are collecting tweets by users "@jack" and "@cbarrie" over the period January 1, 2020 to January 5, 2020 containing the words "twitter" or "social."
 
-files <- c("data_1212161860600041475.json",  "data_1212202218138374144.json",  "data_1212454140183547909.json",  "data_1212541396005064704.json",  "data_1212602429998583808.json",
-"data_1212745962499780610.json",  "data_1212848819668340737.json",  "data_1212931998357966848.json",  "data_1213102352925970433.json",  "data_1213244966530502656.json", 
-"data_1213425494068285442.json",  "query",                          "users_1212161860600041475.json", "users_1212202218138374144.json", "users_1212454140183547909.json",
-"users_1212541396005064704.json", "users_1212602429998583808.json", "users_1212745962499780610.json", "users_1212848819668340737.json", "users_1212931998357966848.json",
-"users_1213102352925970433.json", "users_1213244966530502656.json", "users_1213425494068285442.json")
-
-print(files)
-
-```
-
-, which we can then bind as follows:
-
-```{r, eval= F}
-
-blmtweets <- bind_tweet_jsons("data/academictwitteR_data")
-
-```
-
-Or we can simply read in the data already stored in serialized format as a .rds file:
+Note that the "AND" operator is implicit when specifying more than one character string in the query. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets. Thus, when searching for all elements of a character string, a call may look like:
 
 ```{r, eval=F}
 
-blmtweets <- readRDS("data/blmtweets.rds")
+get_all_tweets(
+  query = c("twitter social"),
+  users = c("cbarrie", "jack"),
+  start_tweets = "2020-01-01T00:00:00Z",
+  end_tweets = "2020-05-01T00:00:00Z",
+  n = 1000
+)
+
+```
+
+, which will capture tweets containing *both* the words "twitter" and "social." The same logics apply for hashtag queries.
+
+Whereas if we specify our query as separate elements of a character vector like this:
+
+```{r, eval=F}
+
+get_all_tweets(
+  query = c("twitter", "social"),
+  users = c("cbarrie", "jack"),
+  start_tweets = "2020-01-01T00:00:00Z",
+  end_tweets = "2020-05-01T00:00:00Z",
+  n = 1000
+)
+
+```
+, this will be capturing tweets by users "@cbarrie" or "@jack" containing the words "twitter" *or* social. 
+
+Finally, we may wish to query an exact phrase. To do so, we can either input the phrase in escape quotes, e.g., `query ="\"Black Lives Matter\""` or we can use the optional parameter `exact_phrase = T` to search for tweets containing the exact phrase string:
+
+```{r, eval=F}
+
+tweets <-
+  get_all_tweets(
+    query = "#BlackLivesMatter",
+    start_tweets = "2020-01-01T00:00:00Z",
+    end_tweets = "2020-01-05T00:00:00Z",
+    file = "blmtweets",
+    data_path = "data/",
+    n = 1000000,
+  )
   
 ```
 
-And we'll end up with something like this:
-
-![](images/gifcap7.gif){width=100%}
+Here, we are collecting tweets containing a hashtag related to the Black Lives Matter movement over the period January 1, 2020 to January 5, 2020. 
 
 ## Building a query 
 
 The v2 Twitter API allows for greater precision when making queries. A query might just be a single string like "happy new year" if you're interested on how people are celebrating on the night of December 31. Alternatively, the query might involve several additional operators that filter tweets with greater precision to return specific tweet content. 
 
-The following section guides you through the logics underpinning queries to the Twitter API. For full information on these logics you may additionally wish to consult the Twitter API documentation on how to build a query [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query).
+This vignette guides you through the logics underpinning queries to the Twitter API. For full information on these logics you may additionally wish to consult the Twitter API documentation on how to build a query [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query).
 
-As above, for a particular set of hashtags a call may look like:
+## Query strings
+
+We first load our package into memory with:
+
+```{r, eval =FALSE}
+library(academictwitteR)
+```
+
+We then make sure we have set our bearer token appropriately by calling:
+
+```{r, eval =FALSE}
+get_bearer()
+```
+
+```{r, echo =FALSE}
+bearer_example <- "AAAAAAAAAAAAAAAAAAAAAPw%2BJQEAAAAAq5Ot8BBYyYlAqT9nLMuVuR1jI5fA%3DqG9HTHISISNOTAREALTOKEN"
+bearer_example
+```
+
+Let's say we were interested in what people were talking about on New Year's Eve. We might do something like this:
 
 ```{r, eval = F}
 
-bearer_token <- "" # Insert bearer token
-
 tweets <-
   get_all_tweets(
-    "#BLM OR #BlackLivesMatter",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token
+    query = "happy",
+    start_tweets = "2019-12-31T10:00:00Z",
+    end_tweets = "2020-01-01T10:00:00Z",
+    n = 10000
   )
 
 ```
 
-Alternatively, we can specify a character string comprising several elements. For example, we if we wanted to search multiple hashtags, we could specify a query as follows:
+Note here that we have also specified an upper limit of 10,000 tweets. The default is 100. For most applications, the user will need to specify a higher n than the default. 
+
+The default upper limit is set to 100 in order to prevent unnecessary ingests of data when e.g. trialling an API call.
+
+As an alternative to this, the user might also wish to use the `count_all_tweets()` function in order to get an idea of how many tweets match the specified API query.
+
+## Additional parameters
+
+In the above we search for all tweets between two dates that contain the string "happy." But what if we were only interested in a particular region or written in a particular language?
+
+Let's say we were only interested in tweets written in English and originating from the US. We would add several operators to our query to filter by these characteristics:
 
 ```{r, eval = F}
 
-bearer_token <- "" # Insert bearer token
-
-htagquery <- c("#BLM", "#BlackLivesMatter", "#GeorgeFloyd")
-
 tweets <-
   get_all_tweets(
-    htagquery,
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token
+    query = "happy",
+    start_tweets = "2019-12-31T10:00:00Z",
+    end_tweets = "2020-01-01T10:00:00Z",
+    country = "US", 
+    lang = "en"
   )
 
 ```
 
-, which will achieve the same thing as typing out `OR` between our strings.  
-
-Note that the "AND" operator is implicit when specifying more than one character string in the query. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets. Thus, when searching for all elements of a character string, a call may look like:
+In fact, the `get_all_tweets()` function can be combined with multiple additional filtering parameters. The example below includes numerous additional filters, keeping only tweets with images, hashtags, and mentions:
 
 ```{r, eval = F}
 
-bearer_token <- "" # Insert bearer token
-
-tweets <-
-  get_all_tweets("apples oranges",
-                 "2020-01-01T00:00:00Z",
-                 "2020-01-05T00:00:00Z",
-                 bearer_token)
-
-```
-
-, which will capture tweets containing *both* the words "apples" and "oranges." The same logic applies for hashtag queries.
-
-## Building a query manually
-
-With `academictwitteR` you have two main options when building a query. The first is to do it "manually" by following the documentation provided by Twitter (linked above) and pasting in the relevant operators to your query.
-
-Here's how you might achieve this, using the `get_all_tweets()` function:
-
-```{r, eval=F}
-
 tweets <-
   get_all_tweets(
-    "#BLM OR #BlackLivesMatter",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    data_path = "data/"
-    bind_tweets = FALSE
+    query = "happy",
+    start_tweets = "2019-12-31T10:00:00Z",
+    end_tweets = "2020-01-01T10:00:00Z",
+    country = "US", 
+    lang = "en",
+    has_images = TRUE,
+    has_hashtags = TRUE,
+    has_mentions = TRUE
   )
-  
-```
 
-We begin with the same query as used in examples above, which searches for tweets containing one or both of the specified hashtags relating to the Black Lives Matter movement. We may, however, want to be more precise with our query. Let's say we were only interested in tweets written in English and originating from the US. We would add several operators to our query to filter by these characteristics:
-
-```{r, eval=F}
-
-tweets <-
-  get_all_tweets(
-    "#BLM OR #BlackLivesMatter place_country:US lang:en",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    data_path = "data/",
-    bind_tweets = FALSE
-  )
-  
-```
-
-Let's further say that we weren't interested in retweets, and that we were only interested in tweets that contained an image. We would then narrow down our query further:
-
-```{r, eval=F}
-
-tweets <-
-  get_all_tweets(
-    "#BLM OR #BlackLivesMatter place_country:US lang:en -is:retweet has:images",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    data_path = "data/",
-    bind_tweets = FALSE
-  )
-  
 ```
 
 We might then decide that our geo filter is not accurate enough. We don't just want tweets originating from the US but we want tweets from Seattle in particular. This would mean adding more operators to our query:
 
 ```{r, eval=F}
-
 tweets <-
   get_all_tweets(
-    "#BLM OR #BlackLivesMatter place_country:US place:seattle lang:en -is:retweet has:images",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    data_path = "data/",
-    bind_tweets = FALSE
+    query = "happy",
+    start_tweets = "2019-12-31T10:00:00Z",
+    end_tweets = "2020-01-01T10:00:00Z",
+    country = "US", 
+    place = "seattle",
+    lang = "en",
+    has_images = TRUE,
+    has_hashtags = TRUE,
+    has_mentions = TRUE
   )
   
 ```
@@ -389,133 +366,109 @@ What if we were unsatisfied with the accuracy of our geo parameters and we wante
 
 ![](images/seattle.png){width=70%}
 
-Twitter also allows us to query tweets originating from within a particular geographical buffer too. Here, we simply specify the longitude and latitude of the southwest and then the northeast corners of this bounding box. Note, this image is taken from a screenshot of the website [http://bboxfinder.com](http://bboxfinder.com). Many such websites exist that allow you to find the bounding box coordinates of a place of interest, including [https://www.openstreetmap.org](https://www.openstreetmap.org) and [https://boundingbox.klokantech.com/](https://boundingbox.klokantech.com/).
+Twitter also allows us to query tweets originating from within a particular geographical buffer too. Here, we simply specify the longitude and latitude of the southwest and then the northeast corners of this bounding box. Note, this image is taken from a screenshot of the website [http://bboxfinder.com](http://bboxfinder.com). 
 
-We can then input this information with the "bounding_box" operator as below:
+Many such websites exist that allow you to find the bounding box coordinates of a place of interest, including [https://www.openstreetmap.org](https://www.openstreetmap.org) and [https://boundingbox.klokantech.com/](https://boundingbox.klokantech.com/).
+
+We can then input this information with the Twitter "bounding_box" operator using the `bbox` argument as below:
+
 
 ```{r, eval=F}
 
 tweets <-
   get_all_tweets(
-    "#BLM OR #BlackLivesMatter bounding_box:[-122.375679 47.563554 -122.266159 47.643417] lang:en -is:retweet has:images",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    data_path = "data/",
-    bind_tweets = FALSE
+    query = "happy",
+    start_tweets = "2019-12-31T10:00:00Z",
+    end_tweets = "2020-01-01T10:00:00Z",
+    country = "US", 
+    place = "seattle",
+    lang = "en",
+    has_images = TRUE,
+    has_hashtags = TRUE,
+    has_mentions = TRUE,
+    bbox = c(-122.375679, 47.563554, -122.266159, 47.643417)
   )
+  
   
 ```
 
-## Building a query with `build_query()`
+The alternative `point_radius` argument requires three pieces of information: the longitude and latitude of a target coordinate, and the buffer size around that coordinate.
 
-Alternatively, you can use the convenience function `build_query()` included in the `academictwitteR` package. 
+```{r, eval=F}
 
-The function comes with multiple optional parameters, which can be combined to generate a more precise query. This can then be passed to an object, here called "query," which can then be entered into the `get_all_tweets()` function as our query. Alternatively, the `build_query` arguments (with the exception of the `geo_query` argument) can be added as additional arguments into the `get_all_tweets` function. 
-
-The below provides an example, and prints the out output of the function. Here, we are building a query for the #BLM hashtag, specifying that we do not want to capture retweets, that we want tweets to originate from London, that we don't want to capture any promoted tweets, that we want the tweets to contain  URLs, that we want it to contain videos, and that they are written in English. 
-
-```{r}
-
-query <- build_query(query = "#BLM", is_retweet = FALSE, place = "London", remove_promoted = TRUE, has_links = TRUE, has_videos = TRUE, lang = "en")
-
-query
-  
-```
-
-We can also enter geographical information with the `build_query()` function. Our two options here are the `point_radius` and `bbox` arguments. Both of these take numeric vectors as inputs. The `point_radius` argument requires three pieces of information: the longitude and latitude of a target coordinate, and the buffer size around that coordinate. The `bbox` argument, which stands for "bounding box," requires four pieces of information: the longitude and latitude of the southwest corner of the bounding box and the longitude and latitude of the northeast corner of the bounding box.
-
-To build a query including a filter by point radius, we might use:
-
-```{r}
-
-query <-
-  build_query(
-    query = "#BLM",
-    point_radius = c(-0.131969125179604, 51.50847878040284, 25)
+tweets <-
+  get_all_tweets(
+    query = "happy",
+    start_tweets = "2019-12-31T10:00:00Z",
+    end_tweets = "2020-01-01T10:00:00Z",
+    country = "US", 
+    place = "seattle",
+    lang = "en",
+    point_radius = c(-122.33795253639994, 47.60900846404393, 25)
   )
-
-query
   
 ```
 
 Note that the maximum radius for the buffer is 25 miles. Similarly, the maximum height and width of any bounding box is 25 miles. Inputting coordinate information that exceeds these bounds will result in a 400 status code error.
 
-To make things a bit simpler, the `build_query()` function also includes prompts for entering parameters that require more precise geographical information, like the "bounding_box" or "point_radius" parameters for which we can submit queries to the Twitter API. These can be called by setting the `geo_query` argument to `TRUE` as so:
+## Building API calls
 
+In the above we created our own API calls. If we wanted to build our own, then we could do so without the use of a bespoke package like <tt>academictwitteR</tt>. For this, we will need the <tt>httr</tt> package, which is useful for for making requests to HTTP servers. The following section builds from a book chapter authored by Chung-hong Chan [here](https://bookdown.org/paul/apis_for_social_scientists/twitter-api.html).
 
-```{r, eval=F}
-
-query <- build_query(query = "#BLM", geo_query = TRUE)
-
-```
-
-```
-Which geo buffer type type do you want? 
-
-1: Point radius
-2: Bounding box
-```
-
-If we select option 1, we will then be prompted to enter the longitude, latitude, and radius of the buffer emanating outwards from this coordinate as below, where I enter the same information as we did above:
-
-```
-Selection: 1
-What is longitude? -0.131969125179604
-What is latitude? 51.50847878040284
-What is radius? 25
-
-```
-
-```{r, echo=F}
-query <-
-  "#BLM -is:retweet point_radius:[-0.131969125179604 51.50847878040284 25mi]"
-
-```
-
-And we see that the end result is the same as the above:
+If we already have our authorization "bearer token" from Twitter and we have stored it appropriately.
 
 ```{r}
-query
+library(httr)
 ```
 
-Note that `build_query()` can also take a character vector of strings as query. This will produce the equivalent of typing "OR" between our target strings. Let's say we were interested in multiple hashtags and not just one. We could still build a query to filter our tweets by the parameters discussed above as follows:
+```{r, eval = F}
+
+paste0("bearer ", Sys.getenv("TWITTER_BEARER"))
+
+```
+
+```{r, eval = T}
+
+my_query <- "#BLM lang:EN"
+
+endpoint_url <- "https://api.twitter.com/2/tweets/search/all"
+
+params <- list(
+  "query" = my_query,
+  "start_time" = "2021-01-01T00:00:00Z",
+  "end_time" = "2021-07-31T23:59:59Z",
+  "max_results" = 20
+)
+
+r <- httr::GET(url = endpoint_url,
+               httr::add_headers(
+                       Authorization = paste0("bearer ", Sys.getenv("TWITTER_BEARER"))),
+               query = params)
+```
+
+And we can then look at the content of this as so:
 
 ```{r}
-
-htagquery <- c("#BLM", "#BlackLivesMatter", "#GeorgeFloyd")
-
-query <-
-  build_query(
-    query = htagquery,
-    is_retweet = FALSE,
-    place = "London",
-    remove_promoted = TRUE,
-    has_links = TRUE,
-    has_videos = TRUE,
-    lang = "en"
-  )
-
-query
-  
+content(r, as = "text")
 ```
 
-And if you wanted to just call `build_query()` within the `get_all_tweets()` function (rather than building it separately) you could do this too:
+And we see that the output is almost as scary as the web-scraping example before!
 
-```{r, eval=F}
-tweets <-
-  get_all_tweets(
-    "#BLM OR #BlackLivesMatter",
-    "2020-01-01T00:00:00Z",
-    "2020-01-05T00:00:00Z",
-    bearer_token,
-    data_path = "data/",
-    bind_tweets = FALSE,
-    lang = "en",
-    is_retweet = F,
-    has_images = T
-  )
-  
+We could make things look a bit nicer by using:
+
+```{r}
+content(r, as = "parsed")
 ```
 
-, which would search for tweets containing the Black Lives Matter hashtags, in English, removing RTs, and containing images. Voilá!
+Or we could think about curating these data as a more friendly `data.frame` object, using a handy function from <tt>plyr</tt>, as follows:
+
+```{r}
+library(plyr)
+
+content <- content(r)
+
+contentdf <- ldply(content$data, data.frame)
+
+head(contentdf)
+
+```
