@@ -13,7 +13,7 @@ Repo of teaching materials for Advanced Methods Workshops taught by Dr Christoph
 
 ## Computational Text Analysis (pt. 1)
 
-- Introduction \[[Slides](https://docs.google.com/presentation/d/1X_MWVuLz9WqMwbSaP1ZJ4tCEeXVziGgR4hm_Y98dt9E/edit?usp=sharing)\]
+- Introduction \[[Slides](https://docs.google.com/presentation/d/11oCyvVgtnS36rWrzSnFy6U62FFlzH_XV4s3S6tNuE4I/edit?usp=sharing)\]
 - Word frequency analysis \[[Worksheet](https://raw.githack.com/cjbarrie/ED-AMWs/main/02_text_as_data/01-word-freq/01-word-freq.html)\]\[[Slides](https://raw.githack.com/cjbarrie/ED-AMWs/main/02_text_as_data/01-word-freq/01-word-freq-pres.html)\]
 - Sentiment analysis \[[Worksheet](https://raw.githack.com/cjbarrie/ED-AMWs/main/02_text_as_data/02-sent-analysis/02-sent-analysis.html)\]\[[Slides](https://raw.githack.com/cjbarrie/ED-AMWs/main/02_text_as_data/02-sent-analysis/02-sent-analysis-pres.html)\]
 
