@@ -25,6 +25,13 @@ Word frequency analysis
 ========================================================
 
 
+```r
+library(tidytext)
+library(janeaustenr)
+library(tidyverse)
+
+bookdata <- tibble(txt = prideprejudice)
+```
 
 
 ```r

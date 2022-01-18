@@ -820,6 +820,13 @@ hljs.initHighlightingOnLoad();
 <section data-transition="none" data-transition-speed="default">
 <h3>Word frequency analysis</h3>
 <div class="slideContent" >
+<pre><code class="r">library(tidytext)
+library(janeaustenr)
+library(tidyverse)
+
+bookdata &lt;- tibble(txt = prideprejudice)
+</code></pre>
+
 <pre><code class="r">head(bookdata)
 </code></pre>
 

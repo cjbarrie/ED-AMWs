@@ -24,7 +24,8 @@ Word frequency analysis
 Word frequency analysis
 ========================================================
 
-```{r, echo=F, message=F, warning=F}
+```{r, echo=T, message=F, warning=F}
+
 library(tidytext)
 library(janeaustenr)
 library(tidyverse)
