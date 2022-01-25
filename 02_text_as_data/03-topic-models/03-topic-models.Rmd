@@ -70,6 +70,7 @@ Once we have read in these data, we convert it into a different data shape: the 
 tocq_words <- tocq %>%
   mutate(booknumber = ifelse(gutenberg_id==815, "DiA1", "DiA2")) %>%
   unnest_tokens(word, text) %>%
+  filter(!is.na(word)) %>%
   count(booknumber, word, sort = TRUE) %>%
   ungroup() %>%
   anti_join(stop_words)
