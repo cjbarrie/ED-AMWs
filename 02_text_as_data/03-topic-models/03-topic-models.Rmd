@@ -180,6 +180,9 @@ In the below, we first separate the volumes into chapters, then we repeat the sa
 
 ```{r}
 
+tocq <- tocq %>%
+  filter(!is.na(text))
+
 # Divide into documents, each representing one chapter
 tocq_chapter <- tocq %>%
   mutate(booknumber = ifelse(gutenberg_id==815, "DiA1", "DiA2")) %>%
