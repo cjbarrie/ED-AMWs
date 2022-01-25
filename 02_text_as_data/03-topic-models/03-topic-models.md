@@ -62,7 +62,7 @@ If you're working on this document from your own computer ("locally") you can do
 
 
 ```r
-tocq <- read_csv("https://raw.githubusercontent.com/cjbarrie/ED-AWMs/main/02_text_as_data/03-topic-models/data/tocq.csv")
+tocq <- read_csv("https://raw.githubusercontent.com/cjbarrie/ED-AMWs/main/02_text_as_data/03-topic-models/data/tocq.csv")
 ```
 
 Once we have read in these data, we convert it into a different data shape: the document-term-matrix. We also create a new columns, which we call "booknumber" that recordss whether the term in question is from Volume 1 or Volume 2. To convert from tidy into "DocumentTermMatrix" format we can first use `unnest_tokens()` as we have done in past exercises, remove stop words, and then use the `cast_dtm()` function to convert into a "DocumentTermMatrix" object.
