@@ -41,6 +41,7 @@ library(gutenbergr) # to get text data
 library(scales)
 library(tm)
 library(ggthemes) # to make your plots look nice
+library(readr)
 ```
 
 We'll be using data from Alexis de Tocqueville's "Democracy in America." We will download these data , both Volume 1 and Volume 2, and combine them into one data frame. For this, we'll be using the <tt>gutenbergr</tt> package, which allows the user to download text data from over 60,000 out-of-copyright books. The ID for each book appears in the url for the book selected after a search on [https://www.gutenberg.org/ebooks/](https://www.gutenberg.org/ebooks/).
@@ -57,8 +58,12 @@ tocq <- gutenberg_download(c(815, 816),
 
 
 
+If you're working on this document from your own computer ("locally") you can download the Tocqueville data in the following way:
 
-## Convert to document-term-matrix
+
+```r
+tocq <- read_csv("https://raw.githubusercontent.com/cjbarrie/ED-AWMs/main/02_text_as_data/03-topic-models/data/tocq.csv")
+```
 
 Once we have read in these data, we convert it into a different data shape: the document-term-matrix. We also create a new columns, which we call "booknumber" that recordss whether the term in question is from Volume 1 or Volume 2. To convert from tidy into "DocumentTermMatrix" format we can first use `unnest_tokens()` as we have done in past exercises, remove stop words, and then use the `cast_dtm()` function to convert into a "DocumentTermMatrix" object.
 
@@ -155,7 +160,7 @@ tocq_top_terms %>%
   theme_tufte(base_family = "Helvetica")
 ```
 
-![](03-topic-models_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![](03-topic-models_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 But how do we actually evaluate these topics? Here, the topics all seem pretty similar. 
 
@@ -238,7 +243,7 @@ ggplot(bookfreq, aes(x = DiA1, y = DiA2, color = abs(DiA1 - DiA2))) +
 ## Warning: Removed 6174 rows containing missing values (geom_text).
 ```
 
-![](03-topic-models_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](03-topic-models_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 We see that there do seem to be some marked distinguishing characteristics. In the plot above, for example, we see that more abstract notions of state systems appear with greater frequency in Volume 1 while Volume 2 seems to contain words specific to America (e.g., "north" and "south") with greater frequency. The way to read the above plot is that words positioned further away from the diagonal line appear with greater frequency in one volume versus the other.
 
@@ -465,7 +470,7 @@ assignments %>%
        fill = "% of assignments")
 ```
 
-![](03-topic-models_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+![](03-topic-models_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
 Not bad! We see that the model estimated with accuracy 91% of chapters in Volume 2 and 79% of chapters in Volume 1
 

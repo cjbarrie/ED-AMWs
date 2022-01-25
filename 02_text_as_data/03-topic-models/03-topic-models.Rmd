@@ -40,6 +40,7 @@ library(gutenbergr) # to get text data
 library(scales)
 library(tm)
 library(ggthemes) # to make your plots look nice
+library(readr)
 ```
 
 We'll be using data from Alexis de Tocqueville's "Democracy in America." We will download these data , both Volume 1 and Volume 2, and combine them into one data frame. For this, we'll be using the <tt>gutenbergr</tt> package, which allows the user to download text data from over 60,000 out-of-copyright books. The ID for each book appears in the url for the book selected after a search on [https://www.gutenberg.org/ebooks/](https://www.gutenberg.org/ebooks/).
@@ -57,8 +58,11 @@ tocq <- gutenberg_download(c(815, 816),
 tocq <- readRDS("data/tocq.RDS")
 ```
 
+If you're working on this document from your own computer ("locally") you can download the Tocqueville data in the following way:
 
-## Convert to document-term-matrix
+```{r, eval = F}
+tocq <- read_csv("https://raw.githubusercontent.com/cjbarrie/ED-AWMs/main/02_text_as_data/03-topic-models/data/tocq.csv")
+```
 
 Once we have read in these data, we convert it into a different data shape: the document-term-matrix. We also create a new columns, which we call "booknumber" that recordss whether the term in question is from Volume 1 or Volume 2. To convert from tidy into "DocumentTermMatrix" format we can first use `unnest_tokens()` as we have done in past exercises, remove stop words, and then use the `cast_dtm()` function to convert into a "DocumentTermMatrix" object.
 
