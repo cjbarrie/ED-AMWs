@@ -387,7 +387,7 @@ University of Edinburgh | <a href="https://github.com/cjbarrie/ED-AMWs">AMWs</a>
 <h2>Implementation</h2>
 <p>The first thing we need to do is to get our data in the right format to calculate so-called “skip-gram probabilties.” If you go through the code line by the line in the below you will begin to understand what these are.</p>
 <p>What’s going on?</p>
-<p>Well, we’re first unnesting our tweet data as in previous exercises. But importantly, here, we’re not unnesting to individual tokens but to ngrams of length 6 or, in other words, for postID n with words k indexed by i, we take words i, 1+1…1+6, then we take words 1+1…1+7. Try just running the first two lines of the code below to see what this means in practice.</p>
+<p>Well, we’re first unnesting our tweet data as in previous exercises. But importantly, here, we’re not unnesting to individual tokens but to ngrams of length 6 or, in other words, for postID n with words k indexed by i, we take words i<sub>1</sub> …i<sub>6</sub>, then we take words i<sub>2</sub> …i<sub>7</sub>. Try just running the first two lines of the code below to see what this means in practice.</p>
 <p>After this, we make a unique ID for the particular ngram we create for each postID, and then we make a unique skipgramID for each postID and ngram. And then we unnest the words of each ngram associated with each skipgramID.</p>
 <p>You can see the resulting output below.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create context window with length 6</span></span>

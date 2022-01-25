@@ -70,7 +70,7 @@ The first thing we need to do is to get our data in the right format to calculat
 
 What's going on?
 
-Well, we're first unnesting our tweet data as in previous exercises. But importantly, here, we're not unnesting to individual tokens but to ngrams of length 6 or, in other words, for postID n with words k indexed by i, we take words i, 1+1...1+6, then we take words 1+1...1+7. Try just running the first two lines of the code below to see what this means in practice. 
+Well, we're first unnesting our tweet data as in previous exercises. But importantly, here, we're not unnesting to individual tokens but to ngrams of length 6 or, in other words, for postID n with words k indexed by i, we take words i~1~ ...i~6~, then we take words i~2~ ...i~7~. Try just running the first two lines of the code below to see what this means in practice. 
 
 After this, we make a unique ID for the particular ngram we create for each postID, and then we make a unique skipgramID for each postID and ngram. And then we unnest the words of each ngram associated with each skipgramID.
 
