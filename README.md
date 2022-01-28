@@ -24,4 +24,4 @@ Repo of teaching materials for Advanced Methods Workshops taught by Dr Christoph
 
 ## Example .Rmd script
 
-You will find an example .Rmd script for compiling your responses
+- You will find an example .Rmd script for compiling your responses [here](https://github.com/cjbarrie/ED-AMWs/blob/main/responses/response_demo.Rmd)
