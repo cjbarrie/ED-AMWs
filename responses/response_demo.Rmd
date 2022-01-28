@@ -1,0 +1,45 @@
+---
+title: "Response Demo"
+author: "INSERT YOUR NAME HERE"
+date: "1/28/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+## Word frequency analysis Q1
+
+```{r}
+library(tidyverse) # loads dplyr, ggplot2, and others
+library(tidytext) # includes set of functions useful for manipulating text
+library(ggthemes) # includes a set of themes to make your visualizations look nice!
+library(readr) # more informative and easy way to import dat
+```
+
+```{r}
+edbfdata <- read_csv("https://raw.githubusercontent.com/cjbarrie/RDL-Ed/main/02-text-as-data/data/edbookfestall.csv")
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r}
+edbfdata %>%
+  mutate(obs=1) %>%
+  group_by(year) %>%
+  summarise(sum_events = sum(obs)) %>%
+  ggplot() +
+  geom_line(aes(year, sum_events)) +
+  theme_tufte(base_family = "Helvetica") + 
+  scale_y_continuous(expand = c(0, 0), limits = c(0, NA))
+  
+```

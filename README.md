@@ -21,3 +21,7 @@ Repo of teaching materials for Advanced Methods Workshops taught by Dr Christoph
 - Introduction \[[Slides](https://docs.google.com/presentation/d/1uRFbL8SiPO1sV9YloPm-3b7x6Qc7wTJVxA5Rx2S41x4/edit?usp=sharing)\]
 - Topic models \[[Worksheet](https://raw.githack.com/cjbarrie/ED-AMWs/main/02_text_as_data/03-topic-models/03-topic-models.html)\]\[[Slides](https://raw.githack.com/cjbarrie/ED-AMWs/main/02_text_as_data/03-topic-models/03-topic-models-pres.html)\]
 - Word embedding \[[Worksheet](https://raw.githack.com/cjbarrie/ED-AMWs/main/02_text_as_data/04-word-embed/04-word-embed.html)\]\[[Slides](https://raw.githack.com/cjbarrie/ED-AMWs/main/02_text_as_data/04-word-embed/04-word-embed-pres.html)\]
+
+## Example .Rmd script
+
+You will find an example .Rmd script for compiling your responses
