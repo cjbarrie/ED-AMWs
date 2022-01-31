@@ -55,6 +55,13 @@ twts_sample$postID <- row.names(twts_sample)
 
 ```
 
+If you're working on this document from your own computer ("locally") you can download the tweets sample data in the following way:
+
+```{r, eval = F}
+url <- "https://github.com/cjbarrie/ED-AMWs/blob/main/02_text_as_data/04-word-embed/data/twts_corpus_sample.rds?raw=true"
+twts_sample <- readRDS(url(url, method="libcurl"))
+```
+
 ## Word vectors via SVD
 
 We're going to set about generating a set of word vectors with from our text data. Note that many word embedding applications will use pre-trained embeddings from a much larger corpus, or will generate local embeddings using neural net-based approaches. 

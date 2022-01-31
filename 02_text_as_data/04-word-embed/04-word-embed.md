@@ -56,6 +56,14 @@ twts_sample <- readRDS("data/twts_corpus_sample.rds")
 twts_sample$postID <- row.names(twts_sample)
 ```
 
+If you're working on this document from your own computer ("locally") you can download the tweets sample data in the following way:
+
+
+```r
+url <- "https://github.com/cjbarrie/ED-AMWs/blob/main/02_text_as_data/04-word-embed/data/twts_corpus_sample.rds?raw=true"
+twts_sample <- readRDS(url(url, method="libcurl"))
+```
+
 ## Word vectors via SVD
 
 We're going to set about generating a set of word vectors with from our text data. Note that many word embedding applications will use pre-trained embeddings from a much larger corpus, or will generate local embeddings using neural net-based approaches. 
@@ -368,7 +376,7 @@ brexit_synonyms %>%
   theme_tufte(base_family = "Helvetica")
 ```
 
-![](04-word-embed_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+![](04-word-embed_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
 
 ## GloVe Embeddings
@@ -534,7 +542,7 @@ ggplot(df_glove_umap) +
   labs(title = "GloVe word embedding in 2D using UMAP")
 ```
 
-![](04-word-embed_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+![](04-word-embed_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
 
 ```r
 # Plot the shaded part of the GloVe word embedding with labels
@@ -545,7 +553,7 @@ ggplot(df_glove_umap[df_glove_umap$UMAP1 < -2.5 & df_glove_umap$UMAP1 > -3 & df_
       theme(plot.title = element_text(hjust = .5, size = 14))
 ```
 
-![](04-word-embed_files/figure-html/unnamed-chunk-24-2.png)<!-- -->
+![](04-word-embed_files/figure-html/unnamed-chunk-25-2.png)<!-- -->
 
 ```r
 # Plot the word embedding of words that are related for the GloVe model
@@ -563,7 +571,7 @@ ggplot(selected_words, aes(x = UMAP1, y = UMAP2)) +
       theme(plot.title = element_text(hjust = .5, size = 14))
 ```
 
-![](04-word-embed_files/figure-html/unnamed-chunk-24-3.png)<!-- -->
+![](04-word-embed_files/figure-html/unnamed-chunk-25-3.png)<!-- -->
 
 
 We can see, here, then that our embeddings seem to make sense. We zoomed in first on that little outgrowth of our 2D mapping, which seemed to correspond to numbers and number words. Then we looked at words around "economy" and we see other related terms like "growth" and "jobs."
