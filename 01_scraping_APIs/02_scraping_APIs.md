@@ -4,7 +4,7 @@ subtitle: "Using APIs and web scraping"
 author:
   name: Christopher Barrie
   affiliation: University of Edinburgh | [AMWs](https://github.com/cjbarrie/ED-AMWs)
-# date: Lecture 6  #"12 January 2022"
+# date: Lecture 6  #"04 February 2022"
 output: 
   html_document:
     theme: flatly
@@ -181,7 +181,7 @@ tweets <-
   )
 ```
 
-Whereas here we are not specifying a search query and instead are requesting all tweets by users "@jack" and "@cbarrie" over the period January 1, 2020 to January 5, 2020. Here, we set an upper limit of 1000 tweets.
+Whereas here we are not specifying a search query and instead are requesting all tweets by users "jack" and "cbarrie" over the period January 1, 2020 to January 5, 2020. Here, we set an upper limit of 1000 tweets.
 
 The search query and user query arguments can be combined in a single API call as so:
 
@@ -196,7 +196,7 @@ get_all_tweets(
 )
 ```
 
-Where here we would be collecting tweets by users "@jack" and "@cbarrie" over the period January 1, 2020 to January 5, 2020 containing the word "twitter."
+Where here we would be collecting tweets by users "jack" and "cbarrrie" over the period January 1, 2020 to January 5, 2020 containing the word "twitter."
 
 
 ```r
@@ -209,7 +209,7 @@ get_all_tweets(
 )
 ```
 
-While here we are collecting tweets by users "@jack" and "@cbarrie" over the period January 1, 2020 to January 5, 2020 containing the words "twitter" or "social."
+While here we are collecting tweets by users "jack" and "cbarrrie" over the period January 1, 2020 to January 5, 2020 containing the words "twitter" or "social."
 
 Note that the "AND" operator is implicit when specifying more than one character string in the query. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets. Thus, when searching for all elements of a character string, a call may look like:
 
@@ -238,7 +238,7 @@ get_all_tweets(
   n = 1000
 )
 ```
-, this will be capturing tweets by users "@cbarrie" or "@jack" containing the words "twitter" *or* social. 
+, this will be capturing tweets by users "cbarrrie" or "jack" containing the words "twitter" *or* social. 
 
 Finally, we may wish to query an exact phrase. To do so, we can either input the phrase in escape quotes, e.g., `query ="\"Black Lives Matter\""` or we can use the optional parameter `exact_phrase = T` to search for tweets containing the exact phrase string:
 
@@ -445,7 +445,7 @@ content(r, as = "text")
 ```
 
 ```
-## [1] "{\"data\":[{\"id\":\"1421621589024514049\",\"text\":\"Dolly Parton used royalties off Whitney Houston’s hit song to support Black community. What a class act! #payitforward #blm #community #dollyparton  https://t.co/iWJpX81kzs\"},{\"id\":\"1421621587737030657\",\"text\":\"RT @Jaxzon2008: “A recent report conducted by BuzzFeed revealed that sundown towns — once thought to be a relic of the Jim Crow era — are s…\"},{\"id\":\"1421621559781908481\",\"text\":\"The Story of Olive Lucas (Part One) by Mary Robinson https://t.co/wxeoBXQJch #WWII #BlackHistory #nursing #BLM #BlackLivesMatter\"},{\"id\":\"1421621538650935301\",\"text\":\"RT @Jaxzon2008: We have All folks from different races fighting for Black folks. William Lloyd Garrison, a White man, is a prime example wh…\"},{\"id\":\"1421621527456346119\",\"text\":\"RT @kk131066: https://t.co/dUqbTl5EDK\\n\\nTo defeat the devil, we must know how he operates &amp; speak his language\\n\\nDon't go high when they go l…\"},{\"id\":\"1421621505612337154\",\"text\":\"RT @Jaxzon2008: THIS NEEDS TO BE RETWEETED:\\n\\nTFG “personally phoned the apolitical Justice Department to pressure the Acting Attorney Gener…\"},{\"id\":\"1421621382123753473\",\"text\":\"Black\\n#BLm https://t.co/cN1i5xLE4J\"},{\"id\":\"1421621377329766400\",\"text\":\"RT @Jaxzon2008: In OK, a white mob took Marie Scott a Black teen from her cell and hung her. Blacks were always falsely accused of wrongful…\"},{\"id\":\"1421621288620134401\",\"text\":\"This Bear playing Dead by daylight ... heart monitor       #BLM #LGBT #loveislove https://t.co/Ef1gEJ1qp3\"},{\"id\":\"1421621206394933249\",\"text\":\"RT @kk131066: https://t.co/Feae919hds\\n\\n#racist democracy doesn't exist\\nDemocracy with #Racists - IMPOSSIBLE\\n\\n#democracy protects #HumanRigh…\"},{\"id\":\"1421621046910799872\",\"text\":\"RT @Jaxzon2008: THIS NEEDS TO BE RETWEETED:\\n\\nTFG “personally phoned the apolitical Justice Department to pressure the Acting Attorney Gener…\"},{\"id\":\"1421620949217067008\",\"text\":\"RT @PeterMerlinCane: @davenewworld_2 If you would like to advise Tommy Bryant what you think of his outburst and refusal to apologize, you…\"},{\"id\":\"1421620935208095747\",\"text\":\"RT @Jaxzon2008: We have All folks from different races fighting for Black folks. William Lloyd Garrison, a White man, is a prime example wh…\"},{\"id\":\"1421620803347550213\",\"text\":\"RT @Why_U_Here_: @sossaholicx These a blk men — Nubian kangz, stop trying to separate the blk community. Blk comes in all shades #BLM ✊\\uD83C\\uDFFE✊\\uD83C\\uDFFE✊\\uD83C\\uDFFE\"},{\"id\":\"1421620756761432071\",\"text\":\"RT @PaulDereume: My mother's side of the family goes back to Richard Mather &amp; this story about Onesimus, who shared a revolutionary way to…\"},{\"id\":\"1421620408340549640\",\"text\":\"RT @blaze0497: ICYMI - Video: Cops, Fed Up with Violent ‘Protesters’ in Downtown LA, Toss #BLM- #Antifa Like Rag Dolls\\n\\nhttps://t.co/xSBOlj…\"},{\"id\":\"1421620189494321153\",\"text\":\"Poem by Mike Wilson,  photo by Tom Roberts https://t.co/mRCG1o54d0 #SaveDemocracy #truthmatters #republicansaretheproblem #fascism #progressive #arrangingdeckchairsonthetitanic #socialjustice #BLM #ClimateEmergency #savetheplanet #apocalypse https://t.co/zWOIx639Ho\"}],\"meta\":{\"newest_id\":\"1421621589024514049\",\"oldest_id\":\"1421620189494321153\",\"result_count\":17,\"next_token\":\"b26v89c19zqg8o3fpdm6w47ntj6a8d5rc9kikn3ik5u2l\"}}"
+## [1] "{\"data\":[{\"id\":\"1421621589024514049\",\"text\":\"Dolly Parton used royalties off Whitney Houston’s hit song to support Black community. What a class act! #payitforward #blm #community #dollyparton  https://t.co/iWJpX81kzs\"},{\"id\":\"1421621587737030657\",\"text\":\"RT @Jaxzon2008: “A recent report conducted by BuzzFeed revealed that sundown towns — once thought to be a relic of the Jim Crow era — are s…\"},{\"id\":\"1421621559781908481\",\"text\":\"The Story of Olive Lucas (Part One) by Mary Robinson https://t.co/wxeoBXQJch #WWII #BlackHistory #nursing #BLM #BlackLivesMatter\"},{\"id\":\"1421621538650935301\",\"text\":\"RT @Jaxzon2008: We have All folks from different races fighting for Black folks. William Lloyd Garrison, a White man, is a prime example wh…\"},{\"id\":\"1421621527456346119\",\"text\":\"RT @kk131066: https://t.co/dUqbTl5EDK\\n\\nTo defeat the devil, we must know how he operates &amp; speak his language\\n\\nDon't go high when they go l…\"},{\"id\":\"1421621505612337154\",\"text\":\"RT @Jaxzon2008: THIS NEEDS TO BE RETWEETED:\\n\\nTFG “personally phoned the apolitical Justice Department to pressure the Acting Attorney Gener…\"},{\"id\":\"1421621382123753473\",\"text\":\"Black\\n#BLm https://t.co/cN1i5xLE4J\"},{\"id\":\"1421621377329766400\",\"text\":\"RT @Jaxzon2008: In OK, a white mob took Marie Scott a Black teen from her cell and hung her. Blacks were always falsely accused of wrongful…\"},{\"id\":\"1421621288620134401\",\"text\":\"This Bear playing Dead by daylight ... heart monitor       #BLM #LGBT #loveislove https://t.co/Ef1gEJ1qp3\"},{\"id\":\"1421621206394933249\",\"text\":\"RT @kk131066: https://t.co/Feae919hds\\n\\n#racist democracy doesn't exist\\nDemocracy with #Racists - IMPOSSIBLE\\n\\n#democracy protects #HumanRigh…\"},{\"id\":\"1421621046910799872\",\"text\":\"RT @Jaxzon2008: THIS NEEDS TO BE RETWEETED:\\n\\nTFG “personally phoned the apolitical Justice Department to pressure the Acting Attorney Gener…\"},{\"id\":\"1421620949217067008\",\"text\":\"RT @PeterMerlinCane: @davenewworld_2 If you would like to advise Tommy Bryant what you think of his outburst and refusal to apologize, you…\"},{\"id\":\"1421620935208095747\",\"text\":\"RT @Jaxzon2008: We have All folks from different races fighting for Black folks. William Lloyd Garrison, a White man, is a prime example wh…\"},{\"id\":\"1421620803347550213\",\"text\":\"RT @Why_U_Here_: @sossaholicx These a blk men — Nubian kangz, stop trying to separate the blk community. Blk comes in all shades #BLM ✊\\uD83C\\uDFFE✊\\uD83C\\uDFFE✊\\uD83C\\uDFFE\"},{\"id\":\"1421620408340549640\",\"text\":\"RT @blaze0497: ICYMI - Video: Cops, Fed Up with Violent ‘Protesters’ in Downtown LA, Toss #BLM- #Antifa Like Rag Dolls\\n\\nhttps://t.co/xSBOlj…\"},{\"id\":\"1421620189494321153\",\"text\":\"Poem by Mike Wilson,  photo by Tom Roberts https://t.co/mRCG1o54d0 #SaveDemocracy #truthmatters #republicansaretheproblem #fascism #progressive #arrangingdeckchairsonthetitanic #socialjustice #BLM #ClimateEmergency #savetheplanet #apocalypse https://t.co/zWOIx639Ho\"}],\"meta\":{\"newest_id\":\"1421621589024514049\",\"oldest_id\":\"1421620189494321153\",\"result_count\":16,\"next_token\":\"b26v89c19zqg8o3fpdm6w47ntj6a8d5rc9kikn3ik5u2l\"}}"
 ```
 
 And we see that the output is almost as scary as the web-scraping example before!
@@ -573,25 +573,17 @@ content(r, as = "parsed")
 ## 
 ## $data[[15]]
 ## $data[[15]]$id
-## [1] "1421620756761432071"
+## [1] "1421620408340549640"
 ## 
 ## $data[[15]]$text
-## [1] "RT @PaulDereume: My mother's side of the family goes back to Richard Mather &amp; this story about Onesimus, who shared a revolutionary way to…"
+## [1] "RT @blaze0497: ICYMI - Video: Cops, Fed Up with Violent ‘Protesters’ in Downtown LA, Toss #BLM- #Antifa Like Rag Dolls\n\nhttps://t.co/xSBOlj…"
 ## 
 ## 
 ## $data[[16]]
 ## $data[[16]]$id
-## [1] "1421620408340549640"
-## 
-## $data[[16]]$text
-## [1] "RT @blaze0497: ICYMI - Video: Cops, Fed Up with Violent ‘Protesters’ in Downtown LA, Toss #BLM- #Antifa Like Rag Dolls\n\nhttps://t.co/xSBOlj…"
-## 
-## 
-## $data[[17]]
-## $data[[17]]$id
 ## [1] "1421620189494321153"
 ## 
-## $data[[17]]$text
+## $data[[16]]$text
 ## [1] "Poem by Mike Wilson,  photo by Tom Roberts https://t.co/mRCG1o54d0 #SaveDemocracy #truthmatters #republicansaretheproblem #fascism #progressive #arrangingdeckchairsonthetitanic #socialjustice #BLM #ClimateEmergency #savetheplanet #apocalypse https://t.co/zWOIx639Ho"
 ## 
 ## 
@@ -604,7 +596,7 @@ content(r, as = "parsed")
 ## [1] "1421620189494321153"
 ## 
 ## $meta$result_count
-## [1] 17
+## [1] 16
 ## 
 ## $meta$next_token
 ## [1] "b26v89c19zqg8o3fpdm6w47ntj6a8d5rc9kikn3ik5u2l"
@@ -672,4 +664,20 @@ head(contentdf)
 ## 4                                 RT @Jaxzon2008: We have All folks from different races fighting for Black folks. William Lloyd Garrison, a White man, is a prime example wh…
 ## 5                         RT @kk131066: https://t.co/dUqbTl5EDK\n\nTo defeat the devil, we must know how he operates &amp; speak his language\n\nDon't go high when they go l…
 ## 6                               RT @Jaxzon2008: THIS NEEDS TO BE RETWEETED:\n\nTFG “personally phoned the apolitical Justice Department to pressure the Acting Attorney Gener…
+```
+
+
+## Exercises
+
+- *If* you have authorization for the Twitter Academic API, use "academictwitteR" to make an API call and share the script that you used. This should run from start to finish. Annotate each step of your code as below. 
+- Go to [https://bookdown.org/paul/apis_for_social_scientists/](https://bookdown.org/paul/apis_for_social_scientists/) and consult an API of interest. Write a script that would connect to one of these APIs (whether or not you manage to get authorization). Annotate each step of your code as below.
+
+
+```r
+# this line does x
+x <- "makes a variable x"
+
+# this line does y 
+
+y <- "makes a variable y"
 ```

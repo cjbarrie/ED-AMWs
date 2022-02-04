@@ -181,7 +181,7 @@ tweets <-
   
 ```
 
-Whereas here we are not specifying a search query and instead are requesting all tweets by users "@jack" and "@cbarrie" over the period January 1, 2020 to January 5, 2020. Here, we set an upper limit of 1000 tweets.
+Whereas here we are not specifying a search query and instead are requesting all tweets by users "jack" and "cbarrie" over the period January 1, 2020 to January 5, 2020. Here, we set an upper limit of 1000 tweets.
 
 The search query and user query arguments can be combined in a single API call as so:
 
@@ -197,7 +197,7 @@ get_all_tweets(
 
 ```
 
-Where here we would be collecting tweets by users "@jack" and "@cbarrie" over the period January 1, 2020 to January 5, 2020 containing the word "twitter."
+Where here we would be collecting tweets by users "jack" and "cbarrrie" over the period January 1, 2020 to January 5, 2020 containing the word "twitter."
 
 ```{r, eval=F}
 
@@ -211,7 +211,7 @@ get_all_tweets(
 
 ```
 
-While here we are collecting tweets by users "@jack" and "@cbarrie" over the period January 1, 2020 to January 5, 2020 containing the words "twitter" or "social."
+While here we are collecting tweets by users "jack" and "cbarrrie" over the period January 1, 2020 to January 5, 2020 containing the words "twitter" or "social."
 
 Note that the "AND" operator is implicit when specifying more than one character string in the query. See [here](https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query) for information on building queries for search tweets. Thus, when searching for all elements of a character string, a call may look like:
 
@@ -242,7 +242,7 @@ get_all_tweets(
 )
 
 ```
-, this will be capturing tweets by users "@cbarrie" or "@jack" containing the words "twitter" *or* social. 
+, this will be capturing tweets by users "cbarrrie" or "jack" containing the words "twitter" *or* social. 
 
 Finally, we may wish to query an exact phrase. To do so, we can either input the phrase in escape quotes, e.g., `query ="\"Black Lives Matter\""` or we can use the optional parameter `exact_phrase = T` to search for tweets containing the exact phrase string:
 
@@ -471,4 +471,19 @@ contentdf <- ldply(content$data, data.frame)
 
 head(contentdf)
 
+```
+
+
+## Exercises
+
+- *If* you have authorization for the Twitter Academic API, use "academictwitteR" to make an API call and share the script that you used. This should run from start to finish. Annotate each step of your code as below. 
+- Go to [https://bookdown.org/paul/apis_for_social_scientists/](https://bookdown.org/paul/apis_for_social_scientists/) and consult an API of interest. Write a script that would connect to one of these APIs (whether or not you manage to get authorization). Annotate each step of your code as below.
+
+```{r, eval =F}
+# this line does x
+x <- "makes a variable x"
+
+# this line does y 
+
+y <- "makes a variable y"
 ```

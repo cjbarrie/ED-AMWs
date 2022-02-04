@@ -433,7 +433,7 @@ University of Edinburgh | <a href="https://github.com/cjbarrie/ED-AMWs">AMWs</a>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> <span class="st">&quot;blmtweets&quot;</span>,</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="dv">1000</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<p>Whereas here we are not specifying a search query and instead are requesting all tweets by users “<span class="citation">(<strong>jack?</strong>)</span>” and “<span class="citation">(<strong>cbarrie?</strong>)</span>” over the period January 1, 2020 to January 5, 2020. Here, we set an upper limit of 1000 tweets.</p>
+<p>Whereas here we are not specifying a search query and instead are requesting all tweets by users “jack” and “cbarrie” over the period January 1, 2020 to January 5, 2020. Here, we set an upper limit of 1000 tweets.</p>
 <p>The search query and user query arguments can be combined in a single API call as so:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_all_tweets</span>(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="st">&quot;twitter&quot;</span>,</span>
@@ -442,7 +442,7 @@ University of Edinburgh | <a href="https://github.com/cjbarrie/ED-AMWs">AMWs</a>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">end_tweets =</span> <span class="st">&quot;2020-05-01T00:00:00Z&quot;</span>,</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">1000</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p>Where here we would be collecting tweets by users “<span class="citation">(<strong>jack?</strong>)</span>” and “<span class="citation">(<strong>cbarrie?</strong>)</span>” over the period January 1, 2020 to January 5, 2020 containing the word “twitter.”</p>
+<p>Where here we would be collecting tweets by users “jack” and “cbarrrie” over the period January 1, 2020 to January 5, 2020 containing the word “twitter.”</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_all_tweets</span>(</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">c</span>(<span class="st">&quot;twitter&quot;</span>, <span class="st">&quot;social&quot;</span>),</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">users =</span> <span class="fu">c</span>(<span class="st">&quot;cbarrie&quot;</span>, <span class="st">&quot;jack&quot;</span>),</span>
@@ -450,7 +450,7 @@ University of Edinburgh | <a href="https://github.com/cjbarrie/ED-AMWs">AMWs</a>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">end_tweets =</span> <span class="st">&quot;2020-05-01T00:00:00Z&quot;</span>,</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">1000</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p>While here we are collecting tweets by users “<span class="citation">(<strong>jack?</strong>)</span>” and “<span class="citation">(<strong>cbarrie?</strong>)</span>” over the period January 1, 2020 to January 5, 2020 containing the words “twitter” or “social.”</p>
+<p>While here we are collecting tweets by users “jack” and “cbarrrie” over the period January 1, 2020 to January 5, 2020 containing the words “twitter” or “social.”</p>
 <p>Note that the “AND” operator is implicit when specifying more than one character string in the query. See <a href="https://developer.twitter.com/en/docs/twitter-api/tweets/search/integrate/build-a-query">here</a> for information on building queries for search tweets. Thus, when searching for all elements of a character string, a call may look like:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_all_tweets</span>(</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">query =</span> <span class="fu">c</span>(<span class="st">&quot;twitter social&quot;</span>),</span>
@@ -468,7 +468,7 @@ University of Edinburgh | <a href="https://github.com/cjbarrie/ED-AMWs">AMWs</a>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">end_tweets =</span> <span class="st">&quot;2020-05-01T00:00:00Z&quot;</span>,</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">1000</span></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p>, this will be capturing tweets by users “<span class="citation">(<strong>cbarrie?</strong>)</span>” or “<span class="citation">(<strong>jack?</strong>)</span>” containing the words “twitter” <em>or</em> social.</p>
+<p>, this will be capturing tweets by users “cbarrrie” or “jack” containing the words “twitter” <em>or</em> social.</p>
 <p>Finally, we may wish to query an exact phrase. To do so, we can either input the phrase in escape quotes, e.g., <code>query =&quot;\&quot;Black Lives Matter\&quot;&quot;</code> or we can use the optional parameter <code>exact_phrase = T</code> to search for tweets containing the exact phrase string:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tweets <span class="ot">&lt;-</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_all_tweets</span>(</span>
@@ -596,7 +596,7 @@ University of Edinburgh | <a href="https://github.com/cjbarrie/ED-AMWs">AMWs</a>
 <span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>               <span class="at">query =</span> params)</span></code></pre></div>
 <p>And we can then look at the content of this as so:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">content</span>(r, <span class="at">as =</span> <span class="st">&quot;text&quot;</span>)</span></code></pre></div>
-<pre><code>## [1] &quot;{\&quot;data\&quot;:[{\&quot;id\&quot;:\&quot;1421621589024514049\&quot;,\&quot;text\&quot;:\&quot;Dolly Parton used royalties off Whitney Houston’s hit song to support Black community. What a class act! #payitforward #blm #community #dollyparton  https://t.co/iWJpX81kzs\&quot;},{\&quot;id\&quot;:\&quot;1421621587737030657\&quot;,\&quot;text\&quot;:\&quot;RT @Jaxzon2008: “A recent report conducted by BuzzFeed revealed that sundown towns — once thought to be a relic of the Jim Crow era — are s…\&quot;},{\&quot;id\&quot;:\&quot;1421621559781908481\&quot;,\&quot;text\&quot;:\&quot;The Story of Olive Lucas (Part One) by Mary Robinson https://t.co/wxeoBXQJch #WWII #BlackHistory #nursing #BLM #BlackLivesMatter\&quot;},{\&quot;id\&quot;:\&quot;1421621538650935301\&quot;,\&quot;text\&quot;:\&quot;RT @Jaxzon2008: We have All folks from different races fighting for Black folks. William Lloyd Garrison, a White man, is a prime example wh…\&quot;},{\&quot;id\&quot;:\&quot;1421621527456346119\&quot;,\&quot;text\&quot;:\&quot;RT @kk131066: https://t.co/dUqbTl5EDK\\n\\nTo defeat the devil, we must know how he operates &amp;amp; speak his language\\n\\nDon&#39;t go high when they go l…\&quot;},{\&quot;id\&quot;:\&quot;1421621505612337154\&quot;,\&quot;text\&quot;:\&quot;RT @Jaxzon2008: THIS NEEDS TO BE RETWEETED:\\n\\nTFG “personally phoned the apolitical Justice Department to pressure the Acting Attorney Gener…\&quot;},{\&quot;id\&quot;:\&quot;1421621382123753473\&quot;,\&quot;text\&quot;:\&quot;Black\\n#BLm https://t.co/cN1i5xLE4J\&quot;},{\&quot;id\&quot;:\&quot;1421621377329766400\&quot;,\&quot;text\&quot;:\&quot;RT @Jaxzon2008: In OK, a white mob took Marie Scott a Black teen from her cell and hung her. Blacks were always falsely accused of wrongful…\&quot;},{\&quot;id\&quot;:\&quot;1421621288620134401\&quot;,\&quot;text\&quot;:\&quot;This Bear playing Dead by daylight ... heart monitor       #BLM #LGBT #loveislove https://t.co/Ef1gEJ1qp3\&quot;},{\&quot;id\&quot;:\&quot;1421621206394933249\&quot;,\&quot;text\&quot;:\&quot;RT @kk131066: https://t.co/Feae919hds\\n\\n#racist democracy doesn&#39;t exist\\nDemocracy with #Racists - IMPOSSIBLE\\n\\n#democracy protects #HumanRigh…\&quot;},{\&quot;id\&quot;:\&quot;1421621046910799872\&quot;,\&quot;text\&quot;:\&quot;RT @Jaxzon2008: THIS NEEDS TO BE RETWEETED:\\n\\nTFG “personally phoned the apolitical Justice Department to pressure the Acting Attorney Gener…\&quot;},{\&quot;id\&quot;:\&quot;1421620949217067008\&quot;,\&quot;text\&quot;:\&quot;RT @PeterMerlinCane: @davenewworld_2 If you would like to advise Tommy Bryant what you think of his outburst and refusal to apologize, you…\&quot;},{\&quot;id\&quot;:\&quot;1421620935208095747\&quot;,\&quot;text\&quot;:\&quot;RT @Jaxzon2008: We have All folks from different races fighting for Black folks. William Lloyd Garrison, a White man, is a prime example wh…\&quot;},{\&quot;id\&quot;:\&quot;1421620803347550213\&quot;,\&quot;text\&quot;:\&quot;RT @Why_U_Here_: @sossaholicx These a blk men — Nubian kangz, stop trying to separate the blk community. Blk comes in all shades #BLM ✊\\uD83C\\uDFFE✊\\uD83C\\uDFFE✊\\uD83C\\uDFFE\&quot;},{\&quot;id\&quot;:\&quot;1421620756761432071\&quot;,\&quot;text\&quot;:\&quot;RT @PaulDereume: My mother&#39;s side of the family goes back to Richard Mather &amp;amp; this story about Onesimus, who shared a revolutionary way to…\&quot;},{\&quot;id\&quot;:\&quot;1421620408340549640\&quot;,\&quot;text\&quot;:\&quot;RT @blaze0497: ICYMI - Video: Cops, Fed Up with Violent ‘Protesters’ in Downtown LA, Toss #BLM- #Antifa Like Rag Dolls\\n\\nhttps://t.co/xSBOlj…\&quot;},{\&quot;id\&quot;:\&quot;1421620189494321153\&quot;,\&quot;text\&quot;:\&quot;Poem by Mike Wilson,  photo by Tom Roberts https://t.co/mRCG1o54d0 #SaveDemocracy #truthmatters #republicansaretheproblem #fascism #progressive #arrangingdeckchairsonthetitanic #socialjustice #BLM #ClimateEmergency #savetheplanet #apocalypse https://t.co/zWOIx639Ho\&quot;}],\&quot;meta\&quot;:{\&quot;newest_id\&quot;:\&quot;1421621589024514049\&quot;,\&quot;oldest_id\&quot;:\&quot;1421620189494321153\&quot;,\&quot;result_count\&quot;:17,\&quot;next_token\&quot;:\&quot;b26v89c19zqg8o3fpdm6w47ntj6a8d5rc9kikn3ik5u2l\&quot;}}&quot;</code></pre>
+<pre><code>## [1] &quot;{\&quot;data\&quot;:[{\&quot;id\&quot;:\&quot;1421621589024514049\&quot;,\&quot;text\&quot;:\&quot;Dolly Parton used royalties off Whitney Houston’s hit song to support Black community. What a class act! #payitforward #blm #community #dollyparton  https://t.co/iWJpX81kzs\&quot;},{\&quot;id\&quot;:\&quot;1421621587737030657\&quot;,\&quot;text\&quot;:\&quot;RT @Jaxzon2008: “A recent report conducted by BuzzFeed revealed that sundown towns — once thought to be a relic of the Jim Crow era — are s…\&quot;},{\&quot;id\&quot;:\&quot;1421621559781908481\&quot;,\&quot;text\&quot;:\&quot;The Story of Olive Lucas (Part One) by Mary Robinson https://t.co/wxeoBXQJch #WWII #BlackHistory #nursing #BLM #BlackLivesMatter\&quot;},{\&quot;id\&quot;:\&quot;1421621538650935301\&quot;,\&quot;text\&quot;:\&quot;RT @Jaxzon2008: We have All folks from different races fighting for Black folks. William Lloyd Garrison, a White man, is a prime example wh…\&quot;},{\&quot;id\&quot;:\&quot;1421621527456346119\&quot;,\&quot;text\&quot;:\&quot;RT @kk131066: https://t.co/dUqbTl5EDK\\n\\nTo defeat the devil, we must know how he operates &amp;amp; speak his language\\n\\nDon&#39;t go high when they go l…\&quot;},{\&quot;id\&quot;:\&quot;1421621505612337154\&quot;,\&quot;text\&quot;:\&quot;RT @Jaxzon2008: THIS NEEDS TO BE RETWEETED:\\n\\nTFG “personally phoned the apolitical Justice Department to pressure the Acting Attorney Gener…\&quot;},{\&quot;id\&quot;:\&quot;1421621382123753473\&quot;,\&quot;text\&quot;:\&quot;Black\\n#BLm https://t.co/cN1i5xLE4J\&quot;},{\&quot;id\&quot;:\&quot;1421621377329766400\&quot;,\&quot;text\&quot;:\&quot;RT @Jaxzon2008: In OK, a white mob took Marie Scott a Black teen from her cell and hung her. Blacks were always falsely accused of wrongful…\&quot;},{\&quot;id\&quot;:\&quot;1421621288620134401\&quot;,\&quot;text\&quot;:\&quot;This Bear playing Dead by daylight ... heart monitor       #BLM #LGBT #loveislove https://t.co/Ef1gEJ1qp3\&quot;},{\&quot;id\&quot;:\&quot;1421621206394933249\&quot;,\&quot;text\&quot;:\&quot;RT @kk131066: https://t.co/Feae919hds\\n\\n#racist democracy doesn&#39;t exist\\nDemocracy with #Racists - IMPOSSIBLE\\n\\n#democracy protects #HumanRigh…\&quot;},{\&quot;id\&quot;:\&quot;1421621046910799872\&quot;,\&quot;text\&quot;:\&quot;RT @Jaxzon2008: THIS NEEDS TO BE RETWEETED:\\n\\nTFG “personally phoned the apolitical Justice Department to pressure the Acting Attorney Gener…\&quot;},{\&quot;id\&quot;:\&quot;1421620949217067008\&quot;,\&quot;text\&quot;:\&quot;RT @PeterMerlinCane: @davenewworld_2 If you would like to advise Tommy Bryant what you think of his outburst and refusal to apologize, you…\&quot;},{\&quot;id\&quot;:\&quot;1421620935208095747\&quot;,\&quot;text\&quot;:\&quot;RT @Jaxzon2008: We have All folks from different races fighting for Black folks. William Lloyd Garrison, a White man, is a prime example wh…\&quot;},{\&quot;id\&quot;:\&quot;1421620803347550213\&quot;,\&quot;text\&quot;:\&quot;RT @Why_U_Here_: @sossaholicx These a blk men — Nubian kangz, stop trying to separate the blk community. Blk comes in all shades #BLM ✊\\uD83C\\uDFFE✊\\uD83C\\uDFFE✊\\uD83C\\uDFFE\&quot;},{\&quot;id\&quot;:\&quot;1421620408340549640\&quot;,\&quot;text\&quot;:\&quot;RT @blaze0497: ICYMI - Video: Cops, Fed Up with Violent ‘Protesters’ in Downtown LA, Toss #BLM- #Antifa Like Rag Dolls\\n\\nhttps://t.co/xSBOlj…\&quot;},{\&quot;id\&quot;:\&quot;1421620189494321153\&quot;,\&quot;text\&quot;:\&quot;Poem by Mike Wilson,  photo by Tom Roberts https://t.co/mRCG1o54d0 #SaveDemocracy #truthmatters #republicansaretheproblem #fascism #progressive #arrangingdeckchairsonthetitanic #socialjustice #BLM #ClimateEmergency #savetheplanet #apocalypse https://t.co/zWOIx639Ho\&quot;}],\&quot;meta\&quot;:{\&quot;newest_id\&quot;:\&quot;1421621589024514049\&quot;,\&quot;oldest_id\&quot;:\&quot;1421620189494321153\&quot;,\&quot;result_count\&quot;:16,\&quot;next_token\&quot;:\&quot;b26v89c19zqg8o3fpdm6w47ntj6a8d5rc9kikn3ik5u2l\&quot;}}&quot;</code></pre>
 <p>And we see that the output is almost as scary as the web-scraping example before!</p>
 <p>We could make things look a bit nicer by using:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">content</span>(r, <span class="at">as =</span> <span class="st">&quot;parsed&quot;</span>)</span></code></pre></div>
@@ -715,25 +715,17 @@ University of Edinburgh | <a href="https://github.com/cjbarrie/ED-AMWs">AMWs</a>
 ## 
 ## $data[[15]]
 ## $data[[15]]$id
-## [1] &quot;1421620756761432071&quot;
+## [1] &quot;1421620408340549640&quot;
 ## 
 ## $data[[15]]$text
-## [1] &quot;RT @PaulDereume: My mother&#39;s side of the family goes back to Richard Mather &amp;amp; this story about Onesimus, who shared a revolutionary way to…&quot;
+## [1] &quot;RT @blaze0497: ICYMI - Video: Cops, Fed Up with Violent ‘Protesters’ in Downtown LA, Toss #BLM- #Antifa Like Rag Dolls\n\nhttps://t.co/xSBOlj…&quot;
 ## 
 ## 
 ## $data[[16]]
 ## $data[[16]]$id
-## [1] &quot;1421620408340549640&quot;
-## 
-## $data[[16]]$text
-## [1] &quot;RT @blaze0497: ICYMI - Video: Cops, Fed Up with Violent ‘Protesters’ in Downtown LA, Toss #BLM- #Antifa Like Rag Dolls\n\nhttps://t.co/xSBOlj…&quot;
-## 
-## 
-## $data[[17]]
-## $data[[17]]$id
 ## [1] &quot;1421620189494321153&quot;
 ## 
-## $data[[17]]$text
+## $data[[16]]$text
 ## [1] &quot;Poem by Mike Wilson,  photo by Tom Roberts https://t.co/mRCG1o54d0 #SaveDemocracy #truthmatters #republicansaretheproblem #fascism #progressive #arrangingdeckchairsonthetitanic #socialjustice #BLM #ClimateEmergency #savetheplanet #apocalypse https://t.co/zWOIx639Ho&quot;
 ## 
 ## 
@@ -746,7 +738,7 @@ University of Edinburgh | <a href="https://github.com/cjbarrie/ED-AMWs">AMWs</a>
 ## [1] &quot;1421620189494321153&quot;
 ## 
 ## $meta$result_count
-## [1] 17
+## [1] 16
 ## 
 ## $meta$next_token
 ## [1] &quot;b26v89c19zqg8o3fpdm6w47ntj6a8d5rc9kikn3ik5u2l&quot;</code></pre>
@@ -785,6 +777,19 @@ University of Edinburgh | <a href="https://github.com/cjbarrie/ED-AMWs">AMWs</a>
 ## 4                                 RT @Jaxzon2008: We have All folks from different races fighting for Black folks. William Lloyd Garrison, a White man, is a prime example wh…
 ## 5                         RT @kk131066: https://t.co/dUqbTl5EDK\n\nTo defeat the devil, we must know how he operates &amp;amp; speak his language\n\nDon&#39;t go high when they go l…
 ## 6                               RT @Jaxzon2008: THIS NEEDS TO BE RETWEETED:\n\nTFG “personally phoned the apolitical Justice Department to pressure the Acting Attorney Gener…</code></pre>
+</div>
+<div id="exercises" class="section level2">
+<h2>Exercises</h2>
+<ul>
+<li><em>If</em> you have authorization for the Twitter Academic API, use “academictwitteR” to make an API call and share the script that you used. This should run from start to finish. Annotate each step of your code as below.</li>
+<li>Go to <a href="https://bookdown.org/paul/apis_for_social_scientists/">https://bookdown.org/paul/apis_for_social_scientists/</a> and consult an API of interest. Write a script that would connect to one of these APIs (whether or not you manage to get authorization). Annotate each step of your code as below.</li>
+</ul>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this line does x</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="st">&quot;makes a variable x&quot;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># this line does y </span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="st">&quot;makes a variable y&quot;</span></span></code></pre></div>
 </div>
 </div>
 
