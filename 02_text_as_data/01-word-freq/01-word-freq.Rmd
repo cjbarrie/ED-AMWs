@@ -290,10 +290,13 @@ What do we think of this measure? Is this an adequate measure of representation 
 Are the keywords we used precise enough? If not, what would you change?
 
 ```{r}
+
+##rename year variable to avoid complete() error
+edbf_term_counts$yeardate <- edbf_term_counts$year
 #get counts by year and word
 edbf_counts <- edbf_term_counts %>%
-  complete(year, word, fill = list(n = 0)) %>%
-  group_by(year) %>%
+  complete(yeardate, word, fill = list(n = 0)) %>%
+  group_by(yeardate) %>%
   mutate(year_total = sum(n)) %>%
   filter(womword==1) %>%
   summarise(sum_wom = sum(n),
@@ -309,7 +312,7 @@ head(edbf_counts)
 So what do we see? Let's take the count of words relating to gender in this dataset, and denominate them by the total number of words in these data per year. 
 
 ```{r, warning=F}
-ggplot(edbf_counts, aes(year, sum_wom / year_total, group=1)) +
+ggplot(edbf_counts, aes(yeardate, sum_wom / year_total, group=1)) +
   geom_line() +
   xlab("Year") +
   ylab("% gender-related words") +
@@ -321,7 +324,7 @@ ggplot(edbf_counts, aes(year, sum_wom / year_total, group=1)) +
 We can add visual guides to draw attention to apparent changes in these data. Here, we might wish to signal the year of the #MeToo movement in 2017.
 
 ```{r, warning=F}
-ggplot(edbf_counts, aes(year, sum_wom / year_total, group=1)) +
+ggplot(edbf_counts, aes(yeardate, sum_wom / year_total, group=1)) +
   geom_line() +
   geom_vline(xintercept = 2017, col="red") +
   xlab("Year") +
@@ -334,7 +337,7 @@ ggplot(edbf_counts, aes(year, sum_wom / year_total, group=1)) +
 And we could label why we are highlighting the year of 2017 by including a text label along the vertical line. 
 
 ```{r, warning=F}
-ggplot(edbf_counts, aes(year, sum_wom / year_total, group=1)) +
+ggplot(edbf_counts, aes(yeardate, sum_wom / year_total, group=1)) +
   geom_line() +
   geom_vline(xintercept = 2017, col="red") +
   geom_text(aes(x=2017.1, label="#metoo year", y=.0015), 

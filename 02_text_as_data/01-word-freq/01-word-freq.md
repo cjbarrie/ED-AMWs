@@ -62,24 +62,14 @@ edbfdata <- read_csv("data/edbookfestall.csv")
 
 ```
 ## New names:
-## * `` -> ...1
-```
-
-```
 ## Rows: 5938 Columns: 12
-```
-
-```
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: ","
-## chr (8): festival_id, title, sub_title, artist, description, genre, age_cate...
-## dbl (4): ...1, year, latitude, longitude
-```
-
-```
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## ── Column specification
+## ──────────────────────────────────────────────────────── Delimiter: "," chr
+## (8): festival_id, title, sub_title, artist, description, genre, age_cate... dbl
+## (4): ...1, year, latitude, longitude
+## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## • `` -> `...1`
 ```
 
 If you're working on this document from your own computer ("locally") you can download the Edinburgh Fringe data in the following way:
@@ -522,10 +512,12 @@ Are the keywords we used precise enough? If not, what would you change?
 
 
 ```r
+##rename year variable to avoid complete() error
+edbf_term_counts$yeardate <- edbf_term_counts$year
 #get counts by year and word
 edbf_counts <- edbf_term_counts %>%
-  complete(year, word, fill = list(n = 0)) %>%
-  group_by(year) %>%
+  complete(yeardate, word, fill = list(n = 0)) %>%
+  group_by(yeardate) %>%
   mutate(year_total = sum(n)) %>%
   filter(womword==1) %>%
   summarise(sum_wom = sum(n),
@@ -539,14 +531,14 @@ head(edbf_counts)
 
 ```
 ## # A tibble: 6 × 3
-##    year sum_wom year_total
-##   <dbl>   <dbl>      <dbl>
-## 1  2012      22      23146
-## 2  2013      40      23277
-## 3  2014      30      25366
-## 4  2015      24      22158
-## 5  2016      34      24356
-## 6  2017      55      27602
+##   yeardate sum_wom year_total
+##      <dbl>   <int>      <int>
+## 1     2012      22      23146
+## 2     2013      40      23277
+## 3     2014      30      25366
+## 4     2015      24      22158
+## 5     2016      34      24356
+## 6     2017      55      27602
 ```
 
 ## Plot time trends 
@@ -555,7 +547,7 @@ So what do we see? Let's take the count of words relating to gender in this data
 
 
 ```r
-ggplot(edbf_counts, aes(year, sum_wom / year_total, group=1)) +
+ggplot(edbf_counts, aes(yeardate, sum_wom / year_total, group=1)) +
   geom_line() +
   xlab("Year") +
   ylab("% gender-related words") +
@@ -570,7 +562,7 @@ We can add visual guides to draw attention to apparent changes in these data. He
 
 
 ```r
-ggplot(edbf_counts, aes(year, sum_wom / year_total, group=1)) +
+ggplot(edbf_counts, aes(yeardate, sum_wom / year_total, group=1)) +
   geom_line() +
   geom_vline(xintercept = 2017, col="red") +
   xlab("Year") +
@@ -586,7 +578,7 @@ And we could label why we are highlighting the year of 2017 by including a text 
 
 
 ```r
-ggplot(edbf_counts, aes(year, sum_wom / year_total, group=1)) +
+ggplot(edbf_counts, aes(yeardate, sum_wom / year_total, group=1)) +
   geom_line() +
   geom_vline(xintercept = 2017, col="red") +
   geom_text(aes(x=2017.1, label="#metoo year", y=.0015), 
